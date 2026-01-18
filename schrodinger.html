@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シュレディンガー方程式の導出 | Hero Portfolio</title>
+    <meta name="description" content="シュレディンガー方程式の導出過程を27のステップで解説">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f0c29;
+            --bg-gradient-mid: #302b63;
+            --bg-gradient-end: #24243e;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent-color: #667eea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 12, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        /* Glass Card */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        /* Equation Table */
+        .equation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .equation-table th,
+        .equation-table td {
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            text-align: left;
+        }
+
+        .equation-table th {
+            background: rgba(102, 126, 234, 0.2);
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .equation-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .equation-table tr:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .equation-number {
+            font-weight: 700;
+            color: var(--accent-color);
+            white-space: nowrap;
+        }
+
+        .equation-content {
+            font-size: 1.1rem;
+        }
+
+        .equation-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* List Styles */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 0.5rem 0; padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .equation-table th,
+            .equation-table td {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* KaTeX overrides for dark theme */
+        .katex {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+
+<body class="">
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">Hero</a>
+            <a href="index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>シュレディンガー方程式の導出</h1>
+            <p class="subtitle">27のステップで理解する量子力学の基礎方程式</p>
+            <span class="badge">📚 参考資料集</span>
+        </section>
+
+        <!-- 基本方程式 -->
+        <div class="card">
+            <h2>基本方程式 (式①〜④)</h2>
+            <table class="equation-table">
+                <thead>
+                    <tr>
+                        <th>式番号</th>
+                        <th>数式</th>
+                        <th>解説</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="equation-number">式①</td>
+                        <td class="equation-content">$$psi(mathbf{r}, t) = psi_0 e^{i(mathbf{k} cdot mathbf{r} - omega t)}$$</td>
+                        <td class="equation-desc">平面波の仮定。位相は空間に対して k、時間に対して ω で進む。確率密度は |ψ|²</td>
+                    </tr>
+                    <tr>
+                        <td class="equation-number">式②</td>
+                        <td class="equation-content">$mathbf{k} = k_x hat{i} + k_y hat{j} + k_z hat{k}$<br>$k = sqrt{k_x^2 + k_y^2 + k_z^2}$</td>
+                        <td class="equation-desc">波数ベクトルの成分表示。大きさ k は三平方の定理</td>
+                    </tr>
+                    <tr>
+                        <td class="equation-number">式③</td>
+                        <td class="equation-content">$mathbf{r} = xhat{i} + yhat{j} + zhat{k}$<br>$mathbf{k} cdot mathbf{r} = k_x x + k_y y + k_z z$</td>
+                        <td class="equation-desc">位置ベクトルの成分表示と内積の展開</td>
+                    </tr>
+                    <tr>
+                        <td class="equation-number">式④</td>
+                        <td class="equation-content">$$psi(mathbf{r}, t) = psi_0 e^{i(k_x x + k_y y + k_z z - omega t)}$$</td>
+                        <td class="equation-desc">①〜③を成分に落とした形。以後の微分はこの形で計算</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 最終過程（デフォルテ） -->
+        <div class="card">
+            <h2>最終形態 (式㉗)</h2>
+            <div class="equation-box final">
+                <span>$$left(-rac{hbar^2}{2m}
+abla^2 + U(x,y,z)
+ight)psi(x,y,z) = Epsi(x,y,z)$$</span>
+            </div>
+            <p><strong>時間に依存しないシュレディンガー方程式（3D）</strong></p>
+        </div>
+       <!-- 参考文献 -->
+        <div class="card" id="references">
+            <h2>📚 参考文献</h2>
+            <table class="equation-table">
+                <thead>
+                    <tr>
+                        <th>書名</th>
+                        <th>著者</th>
+                        <th>出版社</th>
+                        <th>リンク</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>現代の量子力学（上・下）</strong></td>
+                        <td>J.J. Sakurai, J. Napolitano</td>
+                        <td>吉岡書店</td>
+                        <td><a href="https://www.amazon.co.jp/dp/4842703571" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>量子力学（Ⅰ・Ⅱ）</strong></td>
+                        <td>小出昭一郎</td>
+                        <td>裳華房</td>
+                        <td><a href="https://www.amazon.co.jp/dp/4785321326" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>Designed & Built by Hero</p>
+        <p>© 2026 All rights reserved.</p>
+    </footer>
+</body>
+</html>
