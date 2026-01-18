@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電磁波の波動方程式の導出 | Hero Portfolio</title>
+    <meta name="description" content="マクスウェル方程式から電磁波の波動方程式を標準形で導出する完全な解説">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f2027;
+            --bg-gradient-mid: #203a43;
+            --bg-gradient-end: #2c5364;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-color: #f093fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 32, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #0f2027;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent-gradient);
+            color: #0f2027;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .equation-box {
+            background: rgba(240, 147, 251, 0.08);
+            border: 1px solid rgba(240, 147, 251, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-box.highlight {
+            background: rgba(245, 87, 108, 0.15);
+            border-color: rgba(245, 87, 108, 0.4);
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.1);
+        }
+
+        .important-note {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #fec107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-box {
+            background: rgba(67, 233, 123, 0.1);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-box h4 {
+            color: #43e97b;
+            margin-bottom: 0.5rem;
+        }
+
+        ul.condition-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.condition-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul.condition-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        .toc {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            padding: 0;
+            border: none;
+            color: var(--accent-color);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            padding: 0.3rem 0;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex-display {
+            margin: 0.8em 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="/index.html" class="logo">Hero</a>
+            <a href="/index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>電磁波の波動方程式の導出</h1>
+            <p class="subtitle">マクスウェル方程式から波動方程式の標準形を導く</p>
+            <span class="badge">⚡ 電磁気学ノート</span>
+        </section>
+
+        <div class="toc">
+            <h3>目次</h3>
+            <ul>
+                <li><a href="#premise">前提条件（媒質の性質）</a></li>
+                <li><a href="#maxwell">① マクスウェル方程式</a></li>
+                <li><a href="#faraday">② ファラデーの法則のcurl</a></li>
+                <li><a href="#vector">③ ベクトル恒等式</a></li>
+                <li><a href="#ampere">④ アンペール–マクスウェルの法則の代入</a></li>
+                <li><a href="#wave-e">⑤ 電場の波動方程式</a></li>
+                <li><a href="#wave-b">⑥ 磁場の波動方程式</a></li>
+                <li><a href="#velocity">⑦ 波の伝播速度</a></li>
+            </ul>
+        </div>
+
+        <!-- 前提条件 -->
+        <div class="card" id="premise">
+            <h2>
+                <div class="step-number">📋</div> 前提条件（媒質の性質）
+            </h2>
+            <ul class="condition-list">
+                <li>一様・等方・線形媒質</li>
+                <li>電荷・電流なし（真空 or 誘電体内部）</li>
+            </ul>
+            <div class="equation-box">
+                $$\rho = 0, \quad \vec{J} = 0$$
+            </div>
+        </div>
+
+        <!-- マクスウェル方程式 -->
+        <div class="card" id="maxwell">
+            <h2>
+                <div class="step-number">①</div> マクスウェル方程式（微分形）
+            </h2>
+            <p>使用するマクスウェル方程式は以下の4つです：</p>
+            <div class="equation-box">
+                $$\nabla \cdot \vec{E} = 0$$
+            </div>
+            <div class="equation-box">
+                $$\nabla \cdot \vec{B} = 0$$
+            </div>
+            <div class="equation-box">
+                $$\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}$$
+            </div>
+            <div class="equation-box">
+                $$\nabla \times \vec{B} = \mu\varepsilon \frac{\partial \vec{E}}{\partial t}$$
+            </div>
+            <p>ここで $\vec{D} = \varepsilon\vec{E}$, $\vec{B} = \mu\vec{H}$ です。</p>
+        </div>
+
+        <!-- ファラデーの法則にcurlを取る -->
+        <div class="card" id="faraday">
+            <h2>
+                <div class="step-number">②</div> ファラデーの法則に curl を取る
+            </h2>
+            <p>ファラデーの法則の両辺に回転（curl）を取ります：</p>
+            <div class="equation-box highlight">
+                $$\nabla \times (\nabla \times \vec{E}) = -\frac{\partial}{\partial t}(\nabla \times \vec{B})$$
+            </div>
+        </div>
+
+        <!-- ベクトル恒等式 -->
+        <div class="card" id="vector">
+            <h2>
+                <div class="step-number">③</div> ベクトル恒等式を使用（超重要）
+            </h2>
+            <p>以下のベクトル恒等式を使います：</p>
+            <div class="equation-box highlight">
+                $$\nabla \times (\nabla \times \vec{E}) = \nabla(\nabla \cdot \vec{E}) - \nabla^2 \vec{E}$$
+            </div>
+            <p>ここで、前提条件より：</p>
+            <div class="equation-box">
+                $$\nabla \cdot \vec{E} = 0$$
+            </div>
+            <p>よって：</p>
+            <div class="equation-box highlight">
+                $$\nabla \times (\nabla \times \vec{E}) = -\nabla^2 \vec{E}$$
+            </div>
+            <div class="important-note">
+                <strong>重要：</strong>このベクトル恒等式は、波動方程式導出の核心となる変換です。
+            </div>
+        </div>
+
+        <!-- アンペール–マクスウェルの法則を代入 -->
+        <div class="card" id="ampere">
+            <h2>
+                <div class="step-number">④</div> 右辺にアンペール–マクスウェルの法則を代入
+            </h2>
+            <p>②式の右辺にマクスウェル方程式を代入します：</p>
+            <div class="equation-box">
+                $$-\frac{\partial}{\partial t}\left(\mu\varepsilon \frac{\partial \vec{E}}{\partial t}\right) =
+                -\mu\varepsilon \frac{\partial^2 \vec{E}}{\partial t^2}$$
+            </div>
+        </div>
+
+        <!-- 電場の波動方程式 -->
+        <div class="card" id="wave-e">
+            <h2>
+                <div class="step-number">⑤</div> 整理（電場の波動方程式）
+            </h2>
+            <p>③と④の結果を等式で結び、マイナス符号を消します：</p>
+            <div class="equation-box highlight">
+                $$\nabla^2 \vec{E} - \mu\varepsilon \frac{\partial^2 \vec{E}}{\partial t^2} = 0$$
+            </div>
+            <div class="result-box">
+                <h4>電場の波動方程式</h4>
+                <p>これが電場 $\vec{E}$ に関する波動方程式です。</p>
+            </div>
+        </div>
+
+        <!-- 磁場の波動方程式 -->
+        <div class="card" id="wave-b">
+            <h2>
+                <div class="step-number">⑥</div> 磁場についても同様
+            </h2>
+            <p>同様の手順で磁場 $\vec{B}$ についても波動方程式を導出できます：</p>
+            <div class="equation-box highlight">
+                $$\nabla^2 \vec{B} - \mu\varepsilon \frac{\partial^2 \vec{B}}{\partial t^2} = 0$$
+            </div>
+        </div>
+
+        <!-- 波の伝播速度 -->
+        <div class="card" id="velocity">
+            <h2>
+                <div class="step-number">⑦</div> 波の伝播速度
+            </h2>
+            <p>標準的な波動方程式：</p>
+            <div class="equation-box">
+                $$\nabla^2 \psi - \frac{1}{v^2}\frac{\partial^2 \psi}{\partial t^2} = 0$$
+            </div>
+            <p>と比較すると、電磁波の伝播速度は：</p>
+            <div class="equation-box highlight">
+                $$v = \frac{1}{\sqrt{\mu\varepsilon}}$$
+            </div>
+
+            <h3>真空中の場合</h3>
+            <p>真空中では $\mu = \mu_0$, $\varepsilon = \varepsilon_0$ より：</p>
+            <div class="equation-box highlight">
+                $$v = c = \frac{1}{\sqrt{\mu_0 \varepsilon_0}}$$
+            </div>
+            <div class="result-box">
+                <h4>光速の導出</h4>
+                <p>マクスウェルはこの関係から電磁波の速度が光速と一致することを発見し、光が電磁波であることを予言しました。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hero Portfolio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+
+</html>
