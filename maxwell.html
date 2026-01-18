@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クーロン→マクスウェル方程式の導出 | Hero Portfolio</title>
+    <meta name="description" content="クーロンの法則からマクスウェル方程式まで一本道で理解する電磁気学">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f0c29;
+            --bg-gradient-mid: #302b63;
+            --bg-gradient-end: #24243e;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-color: #f093fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 12, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center; gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .equation-box {
+            background: rgba(240, 147, 251, 0.1);
+            border: 1px solid rgba(240, 147, 251, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .equation-box.final {
+            background: rgba(245, 87, 108, 0.15);
+            border-color: rgba(245, 87, 108, 0.4);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        .highlight {
+            background: rgba(240, 147, 251, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .important {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            background: rgba(240, 147, 251, 0.05);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .equation-table th,
+        .equation-table td {
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            text-align: left;
+        }
+
+        .equation-table th {
+            background: rgba(240, 147, 251, 0.2);
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .equation-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .equation-table tr:hover {
+            background: rgba(240, 147, 251, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="">
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">Hero</a>
+            <a href="index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>クーロン → マクスウェル方程式</h1>
+            <p class="subtitle">一本道で理解する電磁気学の本質</p>
+            <span class="badge">⚡ 電磁気学ノート</span>
+        </section>
+
+        <!-- ゴール -->
+        <div class="card">
+            <h2><span class="step-number">0</span> ゴール：マクスウェル方程式</h2>
+            <p>電磁気を「現象の寄せ集め」ではなく、<strong>4本の方程式に圧縮</strong>する：</p>
+            <div class="equation-box final">
+                <span>$$
+abla cdot mathbf{E} = rac{
+ho}{arepsilon_0}, quad 
+abla cdot mathbf{B} = 0$$</span>
+                <span>$$
+abla 	imes mathbf{E} = -rac{partial mathbf{B}}{partial t}, quad 
+abla 	imes mathbf{B} = mu_0 mathbf{J} + mu_0 arepsilon_0 rac{partial mathbf{E}}{partial t}$$</span>
+            </div>
+            <p>これが<strong>マクスウェル方程式（微分形）</strong>。</p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="card">
+            <h2><span class="step-number">1</span> クーロンの法則 → ガウスの法則</h2>
+
+            <h3>クーロン（点電荷）</h3>
+            <p>点電荷 $q$ が原点にあるとき：</p>
+            <div class="equation-box">
+                <span>$$mathbf{E}(mathbf{r}) = rac{1}{4piarepsilon_0} rac{q}{r^2} hat{r}$$</span>
+            </div>
+
+            <h3>ガウスの法則（積分形）</h3>
+            <p>球面 $S$ でフラックスを取ると：</p>
+            <div class="equation-box">
+                <span>$$oint_S mathbf{E} cdot dmathbf{S} = rac{Q_{	ext{enc}}}{arepsilon_0}$$</span>
+            </div>
+
+            <h3>ガウスの法則（微分形）</h3>
+            <p>発散定理を適用：</p>
+            <div class="equation-box final">
+                <span>$$
+abla cdot mathbf{E} = rac{
+ho}{arepsilon_0}$$</span>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card">
+            <h2><span class="step-number">2</span> エルステッド → ビオ・サバール</h2>
+
+            <h3>エルステッド（実験事実）</h3>
+            <p class="important">電流が磁針を回す ⇒ <strong>電流が磁場 $mathbf{B}$ を作る</strong></p>
+
+            <h3>ビオ・サバールの法則</h3>
+            <p>線素 $dell$ による磁場：</p>
+            <div class="equation-box">
+                <span>$$dmathbf{B} = rac{mu_0}{4pi} rac{I , doldsymbol{ell} 	imes hat{r}}{r^2}$$</span>
+            </div>
+            <p>これは「クーロンの磁場版」だが、向きが<span class="highlight">外積（右ねじ）</span>になるのが本質。</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card">
+            <h2><span class="step-number">3</span> ビオ・サバール → アンペール周回積分</h2>
+
+            <p>ビオ・サバールを"回転（curl）"で整理すると、<strong>定常</strong>（時間変化なし）では：</p>
+
+            <h3>アンペールの法則（定常・微分形）</h3>
+            <div class="equation-box">
+                <span>$$
+abla 	imes mathbf{B} = mu_0 mathbf{J}$$</span>
+            </div>
+
+            <h3>アンペールの法則（定常・積分形）</h3>
+            <p>ストークスの定理で：</p>
+            <div class="equation-box">
+                <span>$$oint_C mathbf{B} cdot doldsymbol{ell} = mu_0 I_{	ext{enc}}$$</span>
+            </div>
+
+            <p class="important">⚠️ ここまでだと「なぜ右辺が電流だけ？」が未完成 → 次の"マクスウェル補正"が必要</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="card">
+            <h2><span class="step-number">4</span> 破綻ポイント → マクスウェル補正</h2>
+
+            <h3>破綻の直感（超重要）</h3>
+            <p class="important">
+                <strong>コンデンサの充電中：</strong><br>
+                • 導線には電流 $I$ が流れる<br>
+                • 極板間は導体じゃないので「電流ゼロ」に見える<br>
+                ⇒ 同じ閉曲線 $C$ で、選ぶ面によって $oint mathbf{B} cdot doldsymbol{ell}$ の右辺が変わってしまう！
+            </p>
+
+            <h3>マクスウェルの変位電流</h3>
+            <p>これを救うために、マクスウェルが<strong>変位電流</strong>を導入：</p>
+            <div class="equation-box final">
+                <span>$$
+abla 	imes mathbf{B} = mu_0 mathbf{J} + mu_0 arepsilon_0 rac{partial mathbf{E}}{partial t}$$</span>
+            </div>
+            <p>これが<strong>「アンペール＝マクスウェルの法則」</strong>。</p>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="card">
+            <h2><span class="step-number">5</span> ファラデー의法則（誘導）</h2>
+
+            <p>磁束 $Phi_B$ の時間変化は起電力を生む：</p>
+            <div class="equation-box">
+                <span>$$mathcal{E} = -rac{dPhi_B}{dt}$$</span>
+            </div>
+
+            <p>電場の回転として書くと：</p>
+            <div class="equation-box final">
+                <span>$$
+abla 	imes mathbf{E} = -rac{partial mathbf{B}}{partial t}$$</span>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="card">
+            <h2><span class="step-number">6</span> 磁荷なし（ガウス磁束）</h2>
+
+            <p>自然界に磁荷がない（観測事実）：</p>
+            <div class="equation-box final">
+                <span>$$
+abla cdot mathbf{B} = 0$$</span>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="card">
+            <h2><span class="step-number">7</span> 完成 → 電磁波の導出</h2>
+
+            <p>真空で $
+ho = 0, mathbf{J} = 0$ とすると：</p>
+            <div class="equation-box">
+                <span>$$
+abla 	imes mathbf{B} = mu_0 arepsilon_0 rac{partial mathbf{E}}{partial t}, quad 
+abla 	imes mathbf{E} = -rac{partial mathbf{B}}{partial t}$$</span>
+            </div>
+
+            <p>この2つから波動方程式が出て、速度は：</p>
+            <div class="equation-box final">
+                <span>$$c = rac{1}{sqrt{mu_0 arepsilon_0}}$$</span>
+            </div>
+            <p class="important">⚡ ここで<strong>光＝電磁波</strong>がつながる！</p>
+        </div>
+
+        <!-- 用語対応 -->
+        <div class="card">
+            <h2><span class="step-number">8</span> 用語の対応表</h2>
+            <table class="equation-table">
+                <thead>
+                    <tr>
+                        <th>用語</th>
+                        <th>意味</th>
+                        <th>数学的条件</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>定常</strong></td>
+                        <td>直流・時間変化がない</td>
+                        <td>$partial/partial t = 0$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>非定常</strong></td>
+                        <td>交流・スイッチング・無線充電・電波</td>
+                        <td>$partial/partial t 
+e 0$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>無線充電</strong></td>
+                        <td>ファラデー（$partialmathbf{B}/partial t$が誘導電場）＋ アンペールマクスウェル</td>
+                        <td>時間変化EがBを作る</td>
+                    </tr>
+                    <tr>
+                        <td><strong>誘導電流</strong></td>
+                        <td>ファラデーで起電力→回路に電流</td>
+                        <td>オーム則等で決定</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 参考文献 -->
+        <div class="card" id="references">
+            <h2>📚 参考文献</h2>
+            <table class="equation-table">
+                <thead>
+                    <tr>
+                        <th>書名</th>
+                        <th>著者</th>
+                        <th>出版社</th>
+                        <th>リンク</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>電磁気学（上・下）</strong></td>
+                        <td>砂川重信</td>
+                        <td>岩波書店</td>
+                        <td><a href="https://www.amazon.co.jp/dp/4000067486" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>電磁気学</strong></td>
+                        <td>太田浩一</td>
+                        <td>丸善出版</td>
+                        <td><a href="https://www.amazon.co.jp/dp/4621088831" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ファインマン物理学Ⅲ 電磁気学</strong></td>
+                        <td>R. P. Feynman</td>
+                        <td>岩波書店</td>
+                        <td><a href="https://www.amazon.co.jp/dp/4000077139" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Introduction to Electrodynamics</strong></td>
+                        <td>David J. Griffiths</td>
+                        <td>Cambridge</td>
+                        <td><a href="https://www.amazon.co.jp/dp/1108420419" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Classical Electrodynamics</strong></td>
+                        <td>J. D. Jackson</td>
+                        <td>Wiley</td>
+                        <td><a href="https://www.amazon.co.jp/dp/047130932X" target="_blank" style="color: var(--accent-color);">📖 Amazon</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>Designed & Built by Hero</p>
+        <p>© 2026 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>
