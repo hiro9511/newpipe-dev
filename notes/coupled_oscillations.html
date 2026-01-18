@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連成振動の解析：バネ付き質点系 | Hero Portfolio</title>
+    <meta name="description" content="一列に並んだバネ付き質点系の運動方程式、ラグランジアン、および分散関係の導出">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f2027;
+            --bg-gradient-mid: #203a43;
+            --bg-gradient-end: #2c5364;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --accent-color: #43e97b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 32, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #0f2027;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(67, 233, 123, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent-gradient);
+            color: #0f2027;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .equation-box {
+            background: rgba(67, 233, 123, 0.08);
+            border: 1px solid rgba(67, 233, 123, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-box.highlight {
+            background: rgba(56, 249, 215, 0.15);
+            border-color: rgba(56, 249, 215, 0.4);
+            box-shadow: 0 0 20px rgba(56, 249, 215, 0.1);
+        }
+
+        .important-note {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #fec107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex-display {
+            margin: 1em 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">Hero</a>
+            <a href="index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>連成振動の解析</h1>
+            <p class="subtitle">一列に並んだバネ付き質点系の運動方程式と分散関係</p>
+            <span class="badge">⚙️ 古典力学ノート</span>
+        </section>
+
+        <!-- (1) 各質点に働く力と運動方程式 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">1</div> 運動方程式の導出
+            </h2>
+            <p>バネ定数 $k$、質量 $m$ の質点が一列に並んでおり、それぞれの質点は左右の質点とバネでつながれています。</p>
+
+            <h3>ニュートンの運動方程式</h3>
+            <p>質点の変位を $x_n(t)$ とすると、$n$ 番目の質点が右隣 ($x_{n+1}$) と左隣 ($x_{n-1}$) のバネから受ける力は以下のようになります：</p>
+
+            <div class="equation-box">
+                $$m \ddot{x}_n = k(x_{n+1} - x_n) + k(x_{n-1} - x_n)$$
+            </div>
+            <p>これは、左右のバネの伸び縮みによる復元力の合計を表しています。</p>
+        </div>
+
+        <!-- (2) ラグランジアンの導出 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">2</div> ラグランジアンの導出
+            </h2>
+            <p>解析力学の手法を用いて、系全体のラグランジアン $L = T - V$ を求めます。</p>
+
+            <h3>運動エネルギー $T$</h3>
+            <div class="equation-box">
+                $$T = \sum_n \frac{1}{2} m \dot{x}_n^2$$
+            </div>
+
+            <h3>位置エネルギー $V$</h3>
+            <p>各バネの伸びは $(x_{n+1} - x_n)$ なので：</p>
+            <div class="equation-box">
+                $$V = \sum_n \frac{1}{2} k (x_{n+1} - x_n)^2$$
+            </div>
+
+            <h3>ラグランジアン $L$</h3>
+            <div class="equation-box highlight">
+                $$L = \sum_n \left( \frac{1}{2} m \dot{x}_n^2 - \frac{1}{2} k (x_{n+1} - x_n)^2 \right)$$
+            </div>
+        </div>
+
+        <!-- (3) オイラー＝ラグランジュ方程式 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">3</div> オイラー＝ラグランジュ方程式
+            </h2>
+            <p>ラグランジアンから運動方程式を導くには、各変数 $x_n$ に対して以下の方程式を適用します：</p>
+            <div class="equation-box">
+                $$\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{x}_n} \right) - \frac{\partial L}{\partial x_n} =
+                0$$
+            </div>
+            <p>この計算結果が、ステップ1で示したニュートンの運動方程式と一致することを確認できます。</p>
+        </div>
+
+        <!-- (4) 波動解を仮定 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">4</div> 波動解の仮定
+            </h2>
+            <p>系が非常に長く、波が伝播している状況を考えるため、各質点の変位について以下の波動解を仮定します：</p>
+            <div class="equation-box">
+                $$x_n(t) = \cos(\lambda(n-1) - \omega t)$$
+            </div>
+            <p>ここで、$\lambda$ は波数、$\omega$ は角振動数に対応します。</p>
+        </div>
+
+        <!-- (5) 波動解を運動方程式に代入 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">5</div> 分散関係の導出
+            </h2>
+            <p>仮定した波動解を運動方程式に代入して整理します。</p>
+
+            <div class="equation-box">
+                <p>左辺：$-m\omega^2 \cos(\lambda(n-1) - \omega t)$</p>
+                <p>右辺：$-2k \cos(\lambda(n-1) - \omega t) + k \cos(\lambda(n+1) - \omega t) + k \cos(\lambda(n-2) -
+                    \omega t)$</p>
+            </div>
+
+            <p>三角関数の加法定理（または和積公式）を用いると：</p>
+            <div class="equation-box">
+                $$\cos(\lambda(n) - \omega t) + \cos(\lambda(n-2) - \omega t) = 2\cos(\lambda(n-1) - \omega t)
+                \cos\lambda$$
+            </div>
+
+            <p>これらを代入して整理すると、以下の**分散関係式（dispersion relation）**が得られます：</p>
+
+            <div class="equation-box highlight">
+                $$m\omega^2 = 2k(1 - \cos\lambda)$$
+            </div>
+
+            <div class="important-note">
+                <p><strong>物理的意味：</strong> バネ付き質点系における波の角振動数 $\omega$ と波数 $\lambda$
+                    の関係を記述しています。波数が小さい極限では連続体としての弾性波（音波）に一致します。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Designed & Built by Hero</p>
+        <p>© 2026 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+
+</html>
