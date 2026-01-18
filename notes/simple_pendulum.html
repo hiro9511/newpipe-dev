@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>単振り子の運動方程式と解 | Hero</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent: #ff6b9d;
+            --accent-secondary: #c44569;
+            --border-color: #2a2a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 3rem 0 1rem;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #a855f7;
+            margin: 1.5rem 0 0.8rem;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        p {
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+
+        .note-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .equation-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+            overflow-x: auto;
+        }
+
+        .equation-box.result {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+        }
+
+        .equation-box.error {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            margin: 1rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(255, 107, 157, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .problem-title {
+            color: #a855f7;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .formula-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .formula-table th,
+        .formula-table td {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .formula-table th {
+            background: var(--bg-secondary);
+            color: var(--accent);
+        }
+
+        .formula-table td {
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px dashed #ef4444;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #fca5a5;
+        }
+
+        .warning-box::before {
+            content: "❌ ";
+        }
+
+        .values-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .values-box h4 {
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../index.html" class="logo">Hero</a>
+        <a href="../index.html" class="back-link">← ポートフォリオに戻る</a>
+    </header>
+
+    <div class="container">
+        <h1>⏱️ 単振り子の運動方程式と解</h1>
+        <p>長さ $\ell = 1$ m の棒に質量 $m = 100$ g の重りを付けた振り子について、運動方程式を導出し解を求める。</p>
+
+        <!-- 問題設定 -->
+        <div class="problem-box">
+            <div class="problem-title">📋 問題設定</div>
+            <ul style="color: var(--text-secondary); margin-left: 1rem;">
+                <li>棒の長さ：$\ell = 1.00$ m（重さなし）</li>
+                <li>重りの質量：$m = 100$ g $= 0.100$ kg</li>
+                <li>重力加速度：$g = 9.8$ m/s²</li>
+                <li>重りは点質量として扱う</li>
+            </ul>
+        </div>
+
+        <!-- 問題1：慣性モーメントとトルク -->
+        <section class="note-section">
+            <h2>問題1：慣性モーメントとトルク</h2>
+
+            <h3>トルクの導出</h3>
+            <div class="equation-box">
+                $$ \tau = -mg\ell\sin\theta \tag{①} $$
+            </div>
+            <p>負号は復元力（角度を減少させる向き）を表す。</p>
+
+            <h3>回転の運動方程式</h3>
+            <div class="equation-box">
+                $$ \tau = I\ddot{\theta} \tag{②} $$
+            </div>
+
+            <p>①②より：</p>
+            <div class="equation-box">
+                $$ I\ddot{\theta} = -mg\ell\sin\theta \tag{③} $$
+            </div>
+
+            <h3>慣性モーメント（点質量）</h3>
+            <div class="equation-box">
+                $$ I = m\ell^2 \tag{④} $$
+            </div>
+
+            <p>④を③に代入：</p>
+            <div class="equation-box">
+                $$ m\ell^2\ddot{\theta} = -mg\ell\sin\theta \tag{⑤} $$
+            </div>
+
+            <p>両辺を $m\ell^2$ で割って整理：</p>
+            <div class="equation-box result">
+                $$ \ddot{\theta} = -\frac{g}{\ell}\sin\theta \tag{⑥} $$
+            </div>
+
+            <div class="values-box">
+                <h4>数値計算</h4>
+                <p>$m = 0.100$ kg, $\ell = 1.00$ m, $g = 9.8$ m/s²</p>
+                <ul style="color: var(--text-secondary); margin-left: 1rem;">
+                    <li>慣性モーメント：$I = m\ell^2 = 0.100$ kg·m²</li>
+                    <li>トルク：$\tau = -mg\ell\sin\theta = -0.98\sin\theta$ N·m</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 問題2：小角近似 -->
+        <section class="note-section">
+            <h2>問題2：小角近似で簡略化</h2>
+
+            <p>マクローリン展開より、$|\theta| \ll 1$ のとき：</p>
+            <div class="equation-box">
+                $$ \sin\theta \simeq \theta $$
+            </div>
+
+            <p>⑥に適用すると：</p>
+            <div class="equation-box result">
+                $$ \ddot{\theta} + \frac{g}{\ell}\theta = 0 \tag{⑦} $$
+            </div>
+
+            <p>これは<span class="highlight">調和振動子の微分方程式</span>である。</p>
+        </section>
+
+        <!-- 問題3：一般解 -->
+        <section class="note-section">
+            <h2>問題3：微分方程式の解法</h2>
+
+            <h3>指数関数解の仮定</h3>
+            <div class="equation-box">
+                $$ \theta = e^{\lambda t} \tag{⑧} $$
+            </div>
+            <p>微分すると：</p>
+            <div class="equation-box">
+                $$ \dot{\theta} = \lambda e^{\lambda t}, \quad \ddot{\theta} = \lambda^2 e^{\lambda t} \tag{⑨} $$
+            </div>
+
+            <h3>特性方程式の導出</h3>
+            <p>⑦に代入：</p>
+            <div class="equation-box">
+                $$ \lambda^2 e^{\lambda t} + \frac{g}{\ell}e^{\lambda t} = 0 \tag{⑩} $$
+            </div>
+            <div class="equation-box">
+                $$ e^{\lambda t}\left(\lambda^2 + \frac{g}{\ell}\right) = 0 \tag{⑪} $$
+            </div>
+
+            <p>$e^{\lambda t} \neq 0$ より特性方程式：</p>
+            <div class="equation-box">
+                $$ \lambda^2 + \frac{g}{\ell} = 0 \tag{⑫} $$
+            </div>
+            <div class="equation-box">
+                $$ \lambda^2 = -\frac{g}{\ell} \tag{⑬} $$
+            </div>
+            <div class="equation-box result">
+                $$ \lambda = \pm i\sqrt{\frac{g}{\ell}} \tag{⑭} $$
+            </div>
+
+            <p>ここで角周波数 $\omega = \sqrt{g/\ell}$ とおく。</p>
+
+            <h3>一般解（複素指数形式）</h3>
+            <div class="equation-box">
+                $$ \theta(t) = Ae^{i\omega t} + Be^{-i\omega t} \tag{⑮} $$
+            </div>
+
+            <h3>オイラーの公式</h3>
+            <div class="equation-box">
+                $$ e^{i\omega t} = \cos(\omega t) + i\sin(\omega t) \tag{㉒} $$
+            </div>
+            <div class="equation-box">
+                $$ e^{-i\omega t} = \cos(\omega t) - i\sin(\omega t) \tag{㉓} $$
+            </div>
+
+            <h3>展開と整理</h3>
+            <p>⑮を三角関数で展開：</p>
+            <div class="equation-box">
+                $$ \theta(t) = A\cos(\omega t) + Ai\sin(\omega t) + B\cos(\omega t) - Bi\sin(\omega t) \tag{⑳} $$
+            </div>
+            <div class="equation-box">
+                $$ \theta(t) = (A+B)\cos(\omega t) + (A-B)i\sin(\omega t) \tag{㉑} $$
+            </div>
+
+            <h3>定数の整理</h3>
+            <div class="equation-box">
+                $$ \alpha + \beta i = 2A, \quad A+B = \alpha \tag{⑱} $$
+            </div>
+            <div class="equation-box">
+                $$ \alpha - \beta i = 2B, \quad A-B = \beta i \tag{⑲} $$
+            </div>
+
+            <p>実係数でまとめた形：</p>
+            <div class="equation-box">
+                $$ \theta(t) = \alpha\cos(\omega t) - \beta\sin(\omega t) \tag{㉔} $$
+            </div>
+
+            <h3>三角関数の合成（トリゴナル表示）</h3>
+            <div class="equation-box result">
+                $$ \theta(t) = d\cos(\omega t + \phi) \tag{㉕} $$
+            </div>
+            <p>ここで $d = \sqrt{\alpha^2 + \beta^2}$</p>
+
+            <div class="warning-box">
+                <strong>誤りになる形（物理的に不正）</strong><br>
+                $\theta(t) = d\exp\left(\sqrt{\frac{g}{\ell}}t\right) + \beta\exp\left(-\sqrt{\frac{g}{\ell}}t\right)$
+                (㉖)<br><br>
+                <strong>理由</strong>：$\lambda = \pm i\sqrt{g/\ell}$ は<strong>純虚数</strong>であり、指数関数ではなく振動解（cos, sin）になる。
+            </div>
+        </section>
+
+        <!-- 問題4：初期条件 -->
+        <section class="note-section">
+            <h2>問題4：初期条件の適用</h2>
+
+            <div class="problem-box">
+                <div class="problem-title">初期条件</div>
+                <p>$\theta(0) = \theta_{\max} = \dfrac{\pi}{6}$（最大角度から静かに離す）</p>
+                <p>$\dot{\theta}(0) = 0$（初速度ゼロ）</p>
+            </div>
+
+            <h3>① 角変位 $\theta(t)$ の決定</h3>
+            <p>㉕より：</p>
+            <div class="equation-box">
+                $$ \theta(t) = d\cos(\omega t + \phi) $$
+            </div>
+
+            <p>初期条件を代入：</p>
+            <ul style="color: var(--text-secondary); margin: 1rem 1.5rem;">
+                <li>$\theta(0) = d\cos\phi = \dfrac{\pi}{6}$</li>
+                <li>$\dot{\theta}(t) = -d\omega\sin(\omega t + \phi)$ より $\dot{\theta}(0) = -d\omega\sin\phi = 0$</li>
+            </ul>
+
+            <p>$\sin\phi = 0$ より $\phi = 0$（最大角から静かに離す条件）</p>
+            <p>すると $d = \dfrac{\pi}{6}$</p>
+
+            <div class="equation-box result">
+                $$ \theta(t) = \frac{\pi}{6}\cos(\omega t) \tag{㉖} $$
+            </div>
+
+            <p>$\omega = \sqrt{g/\ell}$ を代入して：</p>
+            <div class="equation-box result">
+                $$ \theta(t) = \frac{\pi}{6}\cos\left(\sqrt{\frac{g}{\ell}}\,t\right) \tag{㉗} $$
+            </div>
+
+            <h3>② 周期・周波数・角周波数</h3>
+            <div class="values-box">
+                <h4>数値結果</h4>
+                <table class="formula-table">
+                    <tr>
+                        <th>物理量</th>
+                        <th>式</th>
+                        <th>数値</th>
+                    </tr>
+                    <tr>
+                        <td>角周波数</td>
+                        <td>$\omega = \sqrt{g/\ell}$</td>
+                        <td>$3.13$ rad/s</td>
+                    </tr>
+                    <tr>
+                        <td>周期</td>
+                        <td>$T = 2\pi/\omega$</td>
+                        <td>$2.01$ s</td>
+                    </tr>
+                    <tr>
+                        <td>周波数</td>
+                        <td>$f = 1/T$</td>
+                        <td>$0.498$ Hz</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- まとめ -->
+        <section class="note-section">
+            <h2>📋 まとめ</h2>
+
+            <table class="formula-table">
+                <tr>
+                    <th>物理量</th>
+                    <th>式・値</th>
+                </tr>
+                <tr>
+                    <td>慣性モーメント</td>
+                    <td>$I = m\ell^2 = 0.100$ kg·m²</td>
+                </tr>
+                <tr>
+                    <td>トルク</td>
+                    <td>$\tau = -0.98\sin\theta$ N·m（小角で $\tau \simeq -0.98\theta$）</td>
+                </tr>
+                <tr>
+                    <td>運動方程式（小角）</td>
+                    <td>$\ddot{\theta} + \dfrac{g}{\ell}\theta = 0$</td>
+                </tr>
+                <tr>
+                    <td>角周波数</td>
+                    <td>$\omega = 3.13$ rad/s</td>
+                </tr>
+                <tr>
+                    <td>周期</td>
+                    <td>$T = 2.01$ s</td>
+                </tr>
+                <tr>
+                    <td>周波数</td>
+                    <td>$f = 0.498$ Hz</td>
+                </tr>
+                <tr>
+                    <td>解（初期条件つき）</td>
+                    <td>$\theta(t) = \dfrac{\pi}{6}\cos(3.13t)$</td>
+                </tr>
+            </table>
+
+            <div class="equation-box result">
+                <strong>最終結果（一般形）</strong>
+                $$ \theta(t) = d\cos\left(\sqrt{\frac{g}{\ell}}\,t + \phi\right) $$
+            </div>
+        </section>
+
+        <!-- 式番号一覧 -->
+        <section class="note-section">
+            <h2>📚 式番号一覧（①〜㉗）</h2>
+            <table class="formula-table">
+                <tr>
+                    <th>番号</th>
+                    <th>数式</th>
+                    <th>意味</th>
+                </tr>
+                <tr>
+                    <td>①</td>
+                    <td>$\tau = -mg\ell\sin\theta$</td>
+                    <td>トルク</td>
+                </tr>
+                <tr>
+                    <td>②</td>
+                    <td>$\tau = I\ddot{\theta}$</td>
+                    <td>回転の運動方程式</td>
+                </tr>
+                <tr>
+                    <td>③</td>
+                    <td>$I\ddot{\theta} = -mg\ell\sin\theta$</td>
+                    <td>①②の結合</td>
+                </tr>
+                <tr>
+                    <td>④</td>
+                    <td>$I = m\ell^2$</td>
+                    <td>慣性モーメント</td>
+                </tr>
+                <tr>
+                    <td>⑤</td>
+                    <td>$m\ell^2\ddot{\theta} = -mg\ell\sin\theta$</td>
+                    <td>④を③に代入</td>
+                </tr>
+                <tr>
+                    <td>⑥</td>
+                    <td>$\ddot{\theta} = -(g/\ell)\sin\theta$</td>
+                    <td>整理後</td>
+                </tr>
+                <tr>
+                    <td>⑦</td>
+                    <td>$\ddot{\theta} + (g/\ell)\theta = 0$</td>
+                    <td>小角近似</td>
+                </tr>
+                <tr>
+                    <td>⑧</td>
+                    <td>$\theta = e^{\lambda t}$</td>
+                    <td>指数解の仮定</td>
+                </tr>
+                <tr>
+                    <td>⑨</td>
+                    <td>$\dot{\theta} = \lambda e^{\lambda t}$, $\ddot{\theta} = \lambda^2 e^{\lambda t}$</td>
+                    <td>微分</td>
+                </tr>
+                <tr>
+                    <td>⑩〜⑭</td>
+                    <td>特性方程式の解法</td>
+                    <td>$\lambda = \pm i\sqrt{g/\ell}$</td>
+                </tr>
+                <tr>
+                    <td>⑮</td>
+                    <td>$\theta = Ae^{i\omega t} + Be^{-i\omega t}$</td>
+                    <td>複素指数形式</td>
+                </tr>
+                <tr>
+                    <td>㉒㉓</td>
+                    <td>オイラーの公式</td>
+                    <td>複素指数 ↔ 三角関数</td>
+                </tr>
+                <tr>
+                    <td>㉕</td>
+                    <td>$\theta = d\cos(\omega t + \phi)$</td>
+                    <td>三角関数の合成</td>
+                </tr>
+                <tr>
+                    <td>㉖㉗</td>
+                    <td>$\theta = (\pi/6)\cos(\omega t)$</td>
+                    <td>初期条件適用後の解</td>
+                </tr>
+            </table>
+        </section>
+
+    </div>
+</body>
+
+</html>
