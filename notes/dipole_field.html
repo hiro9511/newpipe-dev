@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>双極子の電場の導出 | Hero Portfolio</title>
+    <meta name="description" content="電気双極子の電位から電場を導出する完全な解説。ベクトル解析の公式を一から導出。">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f2027;
+            --bg-gradient-mid: #203a43;
+            --bg-gradient-end: #2c5364;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-color: #f093fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 32, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #0f2027;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent-gradient);
+            color: #0f2027;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .equation-box {
+            background: rgba(240, 147, 251, 0.08);
+            border: 1px solid rgba(240, 147, 251, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-box.highlight {
+            background: rgba(245, 87, 108, 0.15);
+            border-color: rgba(245, 87, 108, 0.4);
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.1);
+        }
+
+        .equation-box.numbered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .equation-box .eq-number {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .important-note {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #fec107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-box {
+            background: rgba(67, 233, 123, 0.1);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-box h4 {
+            color: #43e97b;
+            margin-bottom: 0.5rem;
+        }
+
+        .toc {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            padding: 0;
+            border: none;
+            color: var(--accent-color);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            padding: 0.3rem 0;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex-display {
+            margin: 0.8em 0;
+        }
+
+        .warning-box {
+            background: rgba(254, 193, 7, 0.1);
+            border: 1px solid rgba(254, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box h4 {
+            color: #fec107;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="/index.html" class="logo">Hero</a>
+            <a href="/index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>双極子の電場の導出</h1>
+            <p class="subtitle">電位からベクトル解析を用いて電場を導く</p>
+            <span class="badge">⚡ 電磁気学ノート</span>
+        </section>
+
+        <div class="toc">
+            <h3>目次</h3>
+            <ul>
+                <li><a href="#start">1. 出発点（電位と電場の定義）</a></li>
+                <li><a href="#formulas">2. 必要な微分公式の準備</a></li>
+                <li><a href="#key">3. 核となる公式の導出</a></li>
+                <li><a href="#dipole">4. 双極子の電場を導く</a></li>
+                <li><a href="#note">5. 注意事項</a></li>
+            </ul>
+        </div>
+
+        <!-- 出発点 -->
+        <div class="card" id="start">
+            <h2>
+                <div class="step-number">1</div> 出発点
+            </h2>
+            <p>与えられた双極子の電位：</p>
+            <div class="equation-box highlight numbered">
+                <span>$$V(\vec{r}) = \frac{\vec{M} \cdot \vec{r}}{4\pi\varepsilon_0 r^3}$$</span>
+                <span class="eq-number">(1)</span>
+            </div>
+            <p>ここで $r = |\vec{r}|$ です。</p>
+
+            <p>電場の定義：</p>
+            <div class="equation-box numbered">
+                <span>$$\vec{E}(\vec{r}) = -\nabla V(\vec{r})$$</span>
+                <span class="eq-number">(2)</span>
+            </div>
+        </div>
+
+        <!-- 必要な微分公式 -->
+        <div class="card" id="formulas">
+            <h2>
+                <div class="step-number">2</div> 必要な微分公式を準備
+            </h2>
+
+            <h3>距離 $r$ の定義</h3>
+            <div class="equation-box numbered">
+                <span>$$r = \sqrt{x^2 + y^2 + z^2}$$</span>
+                <span class="eq-number">(3)</span>
+            </div>
+
+            <h3>$r$ の勾配</h3>
+            <div class="equation-box numbered">
+                <span>$$\nabla r = \left(\frac{\partial r}{\partial x}, \frac{\partial r}{\partial y}, \frac{\partial
+                    r}{\partial z}\right) = \frac{\vec{r}}{r}$$</span>
+                <span class="eq-number">(4)</span>
+            </div>
+
+            <h3>$1/r^3$ の勾配</h3>
+            <p>よって：</p>
+            <div class="equation-box numbered">
+                <span>$$\nabla\left(\frac{1}{r^3}\right) = \nabla(r^{-3}) = -3r^{-4}\nabla r =
+                    -\frac{3\vec{r}}{r^5}$$</span>
+                <span class="eq-number">(5)</span>
+            </div>
+
+            <h3>$\vec{a} \cdot \vec{r}$ の勾配</h3>
+            <p>また、$\vec{a}$ を定数ベクトルとすると：</p>
+            <div class="equation-box numbered">
+                <span>$$\nabla(\vec{a} \cdot \vec{r}) = \vec{a}$$</span>
+                <span class="eq-number">(6)</span>
+            </div>
+            <p>（理由：$\vec{a} \cdot \vec{r} = a_x x + a_y y + a_z z$ の各偏微分がそれぞれ $a_x, a_y, a_z$）</p>
+        </div>
+
+        <!-- 核となる公式の導出 -->
+        <div class="card" id="key">
+            <h2>
+                <div class="step-number">3</div> 核となる公式の導出（積の微分）
+            </h2>
+            <p>対象：</p>
+            <div class="equation-box numbered">
+                <span>$$f(\vec{r}) = \frac{\vec{a} \cdot \vec{r}}{r^3} = (\vec{a} \cdot \vec{r}) r^{-3}$$</span>
+                <span class="eq-number">(7)</span>
+            </div>
+
+            <h3>積の微分則を適用</h3>
+            <div class="equation-box numbered">
+                <span>$$\nabla f = \nabla\left((\vec{a} \cdot \vec{r}) r^{-3}\right) = r^{-3}\nabla(\vec{a} \cdot
+                    \vec{r}) + (\vec{a} \cdot \vec{r})\nabla(r^{-3})$$</span>
+                <span class="eq-number">(8)</span>
+            </div>
+
+            <p>(6), (5) を代入：</p>
+            <div class="equation-box numbered">
+                <span>$$\nabla f = \frac{\vec{a}}{r^3} + (\vec{a} \cdot
+                    \vec{r})\left(-\frac{3\vec{r}}{r^5}\right)$$</span>
+                <span class="eq-number">(9)</span>
+            </div>
+
+            <p>よって：</p>
+            <div class="equation-box highlight numbered">
+                <span>$$\nabla\left(\frac{\vec{a} \cdot \vec{r}}{r^3}\right) = \frac{\vec{a}}{r^3} - \frac{3(\vec{a}
+                    \cdot \vec{r})\vec{r}}{r^5}$$</span>
+                <span class="eq-number">(10)</span>
+            </div>
+
+            <div class="result-box">
+                <h4>重要なベクトル恒等式</h4>
+                <p>これが双極子の電場を導くための核となる公式です（ここで $\vec{a} = \vec{M}$）。</p>
+            </div>
+        </div>
+
+        <!-- 双極子の電場を導く -->
+        <div class="card" id="dipole">
+            <h2>
+                <div class="step-number">4</div> 双極子の電場を導く
+            </h2>
+            <p>(1) を (2) に代入：</p>
+            <div class="equation-box numbered">
+                <span>$$\vec{E}(\vec{r}) = -\frac{1}{4\pi\varepsilon_0}\nabla\left(\frac{\vec{M} \cdot
+                    \vec{r}}{r^3}\right)$$</span>
+                <span class="eq-number">(11)</span>
+            </div>
+
+            <p>(10) を使う：</p>
+            <div class="equation-box numbered">
+                <span>$$\vec{E}(\vec{r}) = -\frac{1}{4\pi\varepsilon_0}\left(\frac{\vec{M}}{r^3} - \frac{3(\vec{M} \cdot
+                    \vec{r})\vec{r}}{r^5}\right)$$</span>
+                <span class="eq-number">(12)</span>
+            </div>
+
+            <h3>最終形（よく見る形）</h3>
+            <p>並べ替えると：</p>
+            <div class="equation-box highlight numbered">
+                <span>$$\vec{E}(\vec{r}) = \frac{1}{4\pi\varepsilon_0}\left(\frac{3(\vec{M} \cdot \vec{r})\vec{r}}{r^5}
+                    - \frac{\vec{M}}{r^3}\right)$$</span>
+                <span class="eq-number">(13)</span>
+            </div>
+
+            <p>また、$1/r^3$ をくくると：</p>
+            <div class="equation-box highlight numbered">
+                <span>$$\vec{E}(\vec{r}) = -\frac{1}{4\pi\varepsilon_0 r^3}\left(\vec{M} - \frac{3(\vec{M} \cdot
+                    \vec{r})\vec{r}}{r^2}\right)$$</span>
+                <span class="eq-number">(14)</span>
+            </div>
+
+            <div class="result-box">
+                <h4>結論</h4>
+                <p>(13) と (14) は完全に同値です（単にマイナスをどこに置いたかの違い）。</p>
+            </div>
+        </div>
+
+        <!-- 注意事項 -->
+        <div class="card" id="note">
+            <h2>
+                <div class="step-number">5</div> 注意事項（$r = 0$）
+            </h2>
+            <div class="warning-box">
+                <h4>⚠️ 適用範囲</h4>
+                <p>この式は $r \neq 0$（双極子から離れた点）での式です。</p>
+                <p>厳密には点双極子の扱いでは $\delta(\vec{r})$ を含む議論が出ますが、通常の教科書問題は (13)(14) の形でOKです。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hero Portfolio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+
+</html>
