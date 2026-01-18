@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ガウスの法則とクーロンの法則 | Hero Portfolio</title>
+    <meta name="description" content="真空中の電束密度、ガウスの法則、導体球、クーロンの法則の導出">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-mid: #16213e;
+            --bg-gradient-end: #0f3460;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+            --accent-color: #00d9ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #1a1a2e;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent-gradient);
+            color: #1a1a2e;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .equation-box {
+            background: rgba(0, 217, 255, 0.08);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-box.highlight {
+            background: rgba(0, 255, 136, 0.12);
+            border-color: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .important-note {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #fec107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-box h4 {
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex-display {
+            margin: 0.8em 0;
+        }
+
+        .toc {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            padding: 0;
+            border: none;
+            color: var(--accent-color);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            padding: 0.3rem 0;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="/index.html" class="logo">Hero</a>
+            <a href="/index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>ガウスの法則とクーロンの法則</h1>
+            <p class="subtitle">電束密度・ガウスの法則・導体球・クーロンの法則の導出</p>
+            <span class="badge">⚡ 電磁気学ノート</span>
+        </section>
+
+        <div class="toc">
+            <h3>目次</h3>
+            <ul>
+                <li><a href="#gauss">ガウスの法則からの導出</a></li>
+                <li><a href="#conductor">導体球</a></li>
+                <li><a href="#coulomb">クーロンの法則との一致</a></li>
+            </ul>
+        </div>
+
+        <!-- ガウスの法則からの導出 -->
+        <div class="card" id="gauss">
+            <h2>
+                <div class="step-number">1</div> ガウスの法則からの導出
+            </h2>
+
+            <p>真空中における電束密度を $\vec{D}$、電界（強度）を $\vec{E}$ とおく。</p>
+            <p>電束は電気力線を考えて、正負の電荷の始点・終点となる。</p>
+
+            <h3>基本定義</h3>
+            <div class="equation-box">
+                $$\vec{D} = \varepsilon_0 \vec{E} \quad \cdots (1)$$
+            </div>
+            <p>これは真空中の電束密度と電界の関係を定義する。</p>
+
+            <p>面 $dS$ を通る電束 $d\Phi$ は：</p>
+            <div class="equation-box">
+                $$d\Phi = \vec{D} \cdot d\vec{S} \quad \cdots (2)$$
+            </div>
+
+            <h3>電束についてのガウスの法則</h3>
+            <p>全電束は内部の電荷量と等しいとする：</p>
+            <div class="equation-box">
+                $$\int_S d\Phi = \sum_i q_i \quad \cdots (3)$$
+            </div>
+
+            <p>②、③より：</p>
+            <div class="equation-box highlight">
+                $$\oint_S \vec{D} \cdot d\vec{S} = \sum_i q_i \quad \cdots (4)$$
+            </div>
+            <p>これが電束についてのガウスの法則である。</p>
+
+            <h3>電界についてのガウスの法則</h3>
+            <p>電界については①を代入してやればよい：</p>
+            <div class="equation-box highlight">
+                $$\oint_S \varepsilon_0 \vec{E} \cdot d\vec{S} = \sum_i q_i \quad \cdots (5)$$
+            </div>
+            <p>これが電界についてのガウスの法則であり、クーロンの法則と一致する。</p>
+
+            <h3>クーロンの法則との整合性</h3>
+            <div class="equation-box">
+                $$\vec{E} = k \cdot \frac{q}{r^2} \cdot \frac{\vec{r}}{r} \quad \cdots (6)$$
+            </div>
+            <div class="equation-box">
+                $$k = \frac{1}{4\pi\varepsilon_0} \quad \cdots (7)$$
+            </div>
+            <p>であれば、電束についてガウスの法則は矛盾しない。</p>
+
+            <div class="important-note">
+                <strong>重要：</strong>ガウスの法則とクーロンの法則は点電荷でなくても、複数の電荷について成り立つ。
+            </div>
+        </div>
+
+        <!-- 導体球 -->
+        <div class="card" id="conductor">
+            <h2>
+                <div class="step-number">2</div> 導体球
+            </h2>
+
+            <p>半径 $a$ の導体球を考える。中心 $O$ から任意の点 $B$ を考え、$\vec{OB} = \vec{r}$ とする。真空中を考える。</p>
+            <p>導体球に電荷量 $Q$ [C] が与えられる（電荷は均一に分布する）。</p>
+            <p>導体の性質より、電荷は内部には存在せず、すべて表面に分布する。</p>
+            <p>表面電荷密度 $\sigma$ [C/m²] で表現される：</p>
+            <div class="equation-box">
+                $$\sigma = \frac{Q}{S_0} \quad \cdots (8)$$
+            </div>
+            <p>ここで $S_0$ は表面積である。</p>
+
+            <h3>導体内部 $(r < a)$</h3>
+                    <p>電束についてのガウスの法則より：</p>
+                    <div class="equation-box">
+                        $$\oint_{S_0} \vec{D} \cdot d\vec{S} = 0 \quad \cdots (9)$$
+                    </div>
+                    <p>（内部にある電荷はカウントされない）</p>
+                    <p>したがって：</p>
+                    <div class="equation-box">
+                        $$D = 0, \quad E = 0 \quad \cdots (10)$$
+                    </div>
+                    <div class="important-note">
+                        <strong>結論：</strong>導体内部の電界はゼロである。
+                    </div>
+
+                    <h3>導体外部 $(r > a)$</h3>
+                    <p>導体球の外部では、球面 $S'$ の対称性より、すべての方向に均一に電束が出る：</p>
+                    <div class="equation-box">
+                        $$\oint_S \vec{D} \cdot d\vec{S} = Q \quad \cdots (11)$$
+                    </div>
+                    <div class="equation-box">
+                        $$\vec{D} = D\frac{\vec{r}}{r} \quad \cdots (12)$$
+                    </div>
+                    <p>また、面素について：</p>
+                    <div class="equation-box">
+                        $$d\vec{S} = dS\frac{\vec{r}}{r} \quad \cdots (13)$$
+                    </div>
+                    <p>$r$ 一定のとき、$D$ は一定である。(11)〜(13)より：</p>
+                    <div class="equation-box">
+                        $$\oint_S D\frac{\vec{r}}{r} \cdot \frac{\vec{r}}{r} \, dS = Q \quad \cdots (14)$$
+                    </div>
+                    <p>すなわち：</p>
+                    <div class="equation-box">
+                        $$\oint_S D \, dS = Q \quad \cdots (15)$$
+                    </div>
+                    <p>（ただし $r$ 一定のとき $D$ は一定）</p>
+
+                    <p>球面 $S$ 上の微小面積 $dS$ をすべて足すと表面積は $4\pi r^2$ である。(15)より：</p>
+                    <div class="equation-box">
+                        $$4\pi r^2 D = Q \quad \cdots (16)$$
+                    </div>
+                    <p>したがって：</p>
+                    <div class="equation-box highlight">
+                        $$D = \frac{Q}{4\pi r^2} \quad \cdots (17)$$
+                    </div>
+                    <p>(12)、(17)より：</p>
+                    <div class="equation-box">
+                        $$\vec{D} = \frac{1}{4\pi} \cdot \frac{Q}{r^2} \cdot \frac{\vec{r}}{r} \quad \cdots (18)$$
+                    </div>
+                    <p>また $\vec{D} = \varepsilon_0 \vec{E}$ より：</p>
+                    <div class="equation-box highlight">
+                        $$\vec{E} = \frac{1}{4\pi\varepsilon_0} \cdot \frac{Q}{r^2} \cdot \frac{\vec{r}}{r} \quad \cdots
+                        (19)$$
+                    </div>
+        </div>
+
+        <!-- クーロンの法則 -->
+        <div class="card" id="coulomb">
+            <h2>
+                <div class="step-number">3</div> クーロンの法則との一致
+            </h2>
+
+            <p>もし点 $B$ に電荷 $q$ [C] があったときの電気力は：</p>
+            <div class="equation-box">
+                $$\vec{F} = q\vec{E} \quad \cdots (20)$$
+            </div>
+            <p>(19)、(20)より：</p>
+            <div class="equation-box highlight">
+                $$\vec{F} = \frac{1}{4\pi\varepsilon_0} \cdot \frac{qQ}{r^2} \cdot \frac{\vec{r}}{r} \quad \cdots (21)$$
+            </div>
+
+            <div class="result-box">
+                <h4>クーロンの法則</h4>
+                <p>これはクーロンの法則と同じである（2電荷間に働く力である）。</p>
+                <p>ガウスの法則からクーロンの法則が導出された。</p>
+            </div>
+
+            <h3>まとめ</h3>
+            <p>(19)より：</p>
+            <div class="equation-box highlight">
+                $$\vec{E} = \frac{1}{4\pi\varepsilon_0} \cdot \frac{Q}{r^2} \cdot \frac{\vec{r}}{r}$$
+            </div>
+            <p>いま $Q \to p$ [C] とすると：</p>
+            <div class="equation-box">
+                $$\vec{E} = \frac{1}{4\pi\varepsilon_0} \cdot \frac{p}{r^2} \cdot \frac{\vec{r}}{r} \quad \cdots (1')$$
+            </div>
+            <p>と書ける。</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Designed & Built by Hero</p>
+        <p>© 2026 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+
+</html>
