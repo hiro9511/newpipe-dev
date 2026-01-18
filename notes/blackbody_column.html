@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>炉の色を読む知 ― 奈良時代の技術から黒体放射へ | Hero</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent: #ff6b9d;
+            --accent-warm: #ff8c42;
+            --border-color: #2a2a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif JP', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 2;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .column-header {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .column-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-warm), #e74c3c);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff8c42, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.4rem;
+            color: var(--accent-warm);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin: 1.2rem 0;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        .prose-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .equation-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent-warm);
+            overflow-x: auto;
+        }
+
+        .equation-name {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .variable-list {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .variable-list li {
+            margin: 0.5rem 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            color: var(--accent-warm);
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+
+        .color-scale {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .color-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .color-step .dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+        }
+
+        .color-step .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 107, 157, 0.05));
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent-warm);
+            font-family: 'Noto Serif JP', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #e0d0c0;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(255, 107, 157, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 140, 66, 0.3);
+        }
+
+        .conclusion-box p {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            line-height: 2.2;
+            text-align: center;
+        }
+
+        .highlight {
+            color: var(--accent-warm);
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../index.html" class="logo">Hero</a>
+        <a href="../index.html" class="back-link">← ポートフォリオに戻る</a>
+    </header>
+
+    <div class="container">
+        <div class="column-header">
+            <span class="column-tag">Column</span>
+            <h1>🔥 炉の色を読む知</h1>
+            <p class="subtitle">奈良時代の技術から黒体放射へ</p>
+        </div>
+
+        <!-- 導入 -->
+        <section class="prose-section">
+            <p>奈良時代の職人は、炉や金属の<span class="highlight">「色」</span>によって温度を判断していた。</p>
+            <p>この経験的知識は、現代物理学では<span class="highlight">黒体放射（blackbody radiation）</span>として定式化されている。</p>
+
+            <div class="color-scale">
+                <div class="color-step">
+                    <div class="dot" style="background: #1a1a1a;"></div>
+                    <span class="label">黒</span>
+                </div>
+                <div class="color-step">
+                    <div class="dot" style="background: #8b0000;"></div>
+                    <span class="label">暗赤色</span>
+                </div>
+                <div class="color-step">
+                    <div class="dot" style="background: #dc143c;"></div>
+                    <span class="label">赤色</span>
+                </div>
+                <div class="color-step">
+                    <div class="dot" style="background: #ff8c00;"></div>
+                    <span class="label">橙色</span>
+                </div>
+                <div class="color-step">
+                    <div class="dot" style="background: #ffd700;"></div>
+                    <span class="label">黄色</span>
+                </div>
+                <div class="color-step">
+                    <div class="dot" style="background: #fffacd;"></div>
+                    <span class="label">白色</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- プランクの法則 -->
+        <h2>1. プランクの法則（放射スペクトル）</h2>
+        <section class="prose-section">
+            <p>黒体が温度 $T$ において、波長 $\lambda$ の光をどれだけ放射するかを与える式である。</p>
+
+            <div class="equation-box">
+                <div class="equation-name">プランクの法則</div>
+                $$ B(\lambda, T) = \frac{2hc^2}{\lambda^5} \frac{1}{\exp\left(\frac{hc}{\lambda k_{\mathrm{B}} T}\right)
+                - 1} $$
+            </div>
+
+            <ul class="variable-list">
+                <li>$B(\lambda, T)$：波長 $\lambda$ における分光放射輝度</li>
+                <li>$h$：プランク定数</li>
+                <li>$c$：光速</li>
+                <li>$k_{\mathrm{B}}$：ボルツマン定数</li>
+                <li>$T$：絶対温度（K）</li>
+            </ul>
+
+            <p>この式は、<strong>「温度が上がると、放射の分布全体が強くなり、短波長側に伸びる」</strong>ことを定量的に示す。</p>
+            <p>奈良時代の職人が見ていた「赤 → 橙 → 白」という変化は、この分布の変化を肉眼で見ていたに過ぎない。</p>
+        </section>
+
+        <!-- ウィーンの変位則 -->
+        <h2>2. ウィーンの変位則（ピーク波長と温度）</h2>
+        <section class="prose-section">
+            <p>放射が最も強くなる波長 $\lambda_{\max}$ と温度の関係は、次式で与えられる。</p>
+
+            <div class="equation-box">
+                <div class="equation-name">ウィーンの変位則</div>
+                $$ \lambda_{\max} T = b $$
+                $$ \lambda_{\max} = \frac{b}{T} $$
+            </div>
+
+            <ul class="variable-list">
+                <li>$b = 2.898 \times 10^{-3}\,\mathrm{m \cdot K}$（ウィーン定数）</li>
+            </ul>
+
+            <p>この式は、</p>
+            <ul class="variable-list">
+                <li><strong>低温</strong>：赤外線 → 暗赤色</li>
+                <li><strong>高温</strong>：可視光 → 白色</li>
+            </ul>
+            <p>へと色が変わる理由を端的に表している。</p>
+
+            <h3>具体例</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>対象</th>
+                    <th>温度</th>
+                    <th>ピーク波長</th>
+                </tr>
+                <tr>
+                    <td>太陽</td>
+                    <td>約5800 K</td>
+                    <td>$\lambda_{\max} \approx 500$ nm（可視光）</td>
+                </tr>
+                <tr>
+                    <td>鍛冶炉</td>
+                    <td>約1000 K</td>
+                    <td>赤〜橙色</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- シュテファン＝ボルツマンの法則 -->
+        <h2>3. シュテファン＝ボルツマンの法則（全放射エネルギー）</h2>
+        <section class="prose-section">
+            <p>黒体が単位時間・単位面積あたりに放射する全エネルギーは、温度の4乗に比例する。</p>
+
+            <div class="equation-box">
+                <div class="equation-name">シュテファン＝ボルツマンの法則</div>
+                $$ P = \sigma T^4 $$
+            </div>
+
+            <ul class="variable-list">
+                <li>$P$：放射パワー</li>
+                <li>$\sigma = 5.67 \times 10^{-8}\,\mathrm{W\,m^{-2}\,K^{-4}}$（シュテファン＝ボルツマン定数）</li>
+            </ul>
+
+            <p>この法則は、<strong>「白くなるほど、急激に熱が強くなる」</strong>という職人の感覚を、正確に数式化したものである。</p>
+        </section>
+
+        <!-- 奈良時代の知と現代物理の対応 -->
+        <h2>4. 奈良時代の知と現代物理の対応</h2>
+        <section class="prose-section">
+            <table class="comparison-table">
+                <tr>
+                    <th>奈良時代の表現</th>
+                    <th>現代物理</th>
+                </tr>
+                <tr>
+                    <td>火が黒い</td>
+                    <td>低温黒体放射（赤外）</td>
+                </tr>
+                <tr>
+                    <td>赤くなった</td>
+                    <td>可視光域への進入</td>
+                </tr>
+                <tr>
+                    <td>白く冴える</td>
+                    <td>高温黒体放射</td>
+                </tr>
+                <tr>
+                    <td>火色を見る</td>
+                    <td>スペクトル分布の観察</td>
+                </tr>
+            </table>
+
+            <p>奈良時代にはこれらを数式で表す文化はなかったが、現象そのものは正確に理解され、再現可能な技術として身体化されていた。</p>
+        </section>
+
+        <!-- 銅とヒ素 -->
+        <h2>5. 銅にヒ素を加えると融点は下がるのか</h2>
+        <section class="prose-section">
+            <p>状態図が示す通り、銅（Cu）にヒ素（As）を加えると、融点（液相線温度）は低下する傾向がある。これは合金化によって結晶構造が乱れ、固体としての安定性が下がるためである。</p>
+            <p>この現象は現代材料科学では<span
+                    class="highlight">共晶反応</span>として理解されているが、古代においても「少し混ぜると溶けやすくなる」という経験的知識として知られていた可能性が高い。</p>
+        </section>
+
+        <!-- 大仏とヒ素 -->
+        <h2>6. なぜ奈良の大仏にはヒ素がほとんど含まれていないのか</h2>
+        <section class="prose-section">
+            <p>奈良・東大寺の大仏（盧舎那仏）の成分分析によれば、主成分は銅・錫・鉛であり、ヒ素はほとんど検出されない。その理由は以下に整理できる。</p>
+
+            <h3>健康被害の回避</h3>
+            <p>ヒ素は高温で有毒な蒸気（As₂O₃など）を発生させるため、大規模鋳造では作業者に深刻な危険をもたらす。</p>
+
+            <h3>成分制御の難しさ</h3>
+            <p>ヒ素は揮発しやすく、合金比を安定して保ちにくい。巨大鋳造物では再現性と安定性が最重要である。</p>
+
+            <h3>技術の成熟</h3>
+            <p>奈良時代には中国・朝鮮半島から伝来した錫青銅（Cu–Sn）が主流となっており、信頼性の高い材料系が選ばれていた。</p>
+
+            <div class="quote-box">
+                したがって、ヒ素を「知らなかった」のではなく、<strong>知った上で避けた</strong>と考えるのが妥当である。
+            </div>
+        </section>
+
+        <!-- 奈良時代の炉温度 -->
+        <h2>7. 奈良時代の炉は1000度を超えていたのか</h2>
+        <section class="prose-section">
+            <p>結論から言えば、<span class="highlight">超えていた</span>。</p>
+            <p>青銅鋳造にはおよそ950〜1100℃が必要であり、奈良時代の送風炉（踏みふいご）と木炭を用いれば、この温度域は十分に到達可能だった。</p>
+            <p>大仏鋳造のような国家的事業が成立している事実そのものが、その技術水準を裏づけている。</p>
+        </section>
+
+        <!-- 温度計はなく、色があった -->
+        <h2>8. 温度計はなく、色があった</h2>
+        <section class="prose-section">
+            <p>奈良時代には温度計は存在しなかったが、職人たちは<span class="highlight">色によって温度を判断していた</span>。</p>
+            <p>この変化をもとに、</p>
+            <div class="quote-box">
+                「この色ではまだ早い」<br>
+                「この色になったら流し込め」
+            </div>
+            <p>といった判断が行われていた。</p>
+        </section>
+
+        <!-- 言葉として残っていた -->
+        <h2>9. 式はなかったが、言葉はあった</h2>
+        <section class="prose-section">
+            <p>後世の文献（戦国〜江戸期）には、</p>
+            <ul class="variable-list">
+                <li>「赤くなったら打て」</li>
+                <li>「狐色」「薄色」「火色を見る」</li>
+            </ul>
+            <p>といった表現が見られる。たとえば<strong>「狐色になったら焼きを入れる」</strong>は、現代換算でおよそ750℃前後に対応する。</p>
+            <p>奈良時代の直接的な文献はほとんど残っていないが、これは技術が師弟間の口伝と実習によって伝えられていたためである。</p>
+        </section>
+
+        <!-- 結論 -->
+        <h2>10. 結論 ― 科学になる前の科学</h2>
+        <section class="prose-section">
+            <p>奈良時代の人々は、</p>
+            <ul class="variable-list">
+                <li>色と温度の関係を確実に認識し</li>
+                <li>数式は持たなかったが</li>
+                <li>実用に足る高度な技術体系として<span class="highlight">身体化</span>していた</li>
+            </ul>
+            <p>これは<strong>「科学になる前の科学」</strong>である。</p>
+            <p>プランクの法則も、ウィーンの変位則も、炉の前に立つ職人が見ていた光を、後から数式に翻訳したものにすぎない。</p>
+        </section>
+
+        <!-- 結語 -->
+        <div class="conclusion-box">
+            <p>物理は、式から始まったのではない。<br>
+                <strong>炉の中の色として、すでにそこにあった。</strong>
+            </p>
+        </div>
+
+        <!-- 関連ノート -->
+        <section class="prose-section">
+            <h3>📚 関連ノート</h3>
+            <ul class="variable-list">
+                <li><a href="maxwell_prep.html" style="color: var(--accent);">マクスウェル方程式導出準備</a></li>
+                <li><a href="wave_equation.html" style="color: var(--accent);">電磁波の波動方程式の導出</a></li>
+                <li><a href="biot_savart.html" style="color: var(--accent);">ビオ・サバールの法則と直線電流の磁場</a></li>
+            </ul>
+        </section>
+
+    </div>
+</body>
+
+</html>
