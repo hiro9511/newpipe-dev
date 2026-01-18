@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hero - Physics Researcher & Developer">
+    <meta name="theme-color" content="#0f0f23">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- OGP -->
+    <meta property="og:title" content="Hero | Portfolio">
+    <meta property="og:description" content="Physics Researcher & Developer">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://161.33.9.190/">
+
+    <title>Hero | Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="logo-text">Hero</span>
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="テーマ切替">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="nav-toggle" id="nav-toggle" aria-label="メニュー">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-particles"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-avatar">
+                <div class="avatar-ring"></div>
+                <div class="avatar-placeholder">H</div>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="greeting">Hello, I'm</span>
+                <span class="name">Hero</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                <span class="typing-text">Physics Researcher & Developer</span>
+            </p>
+
+            <p class="hero-description">
+                物理学の研究とプログラミングに情熱を注ぐ高専生。<br>
+                HarmonyOS、Python、そして素粒子物理学に興味があります。
+            </p>
+
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">
+                    <span>View Projects</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    <span>Contact Me</span>
+                </a>
+            </div>
+
+            <div class="hero-social">
+                <a href="https://github.com/hiro9511" class="social-link" target="_blank" rel="noopener"
+                    aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12" />
+                    </svg>
+                </a>
+                <a href="https://twitter.com/" class="social-link" target="_blank" rel="noopener"
+                    aria-label="Twitter/X">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                </a>
+                <a href="mailto:nobuhiro9511@petalmail.com" class="social-link" aria-label="Email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <a href="#about" class="scroll-indicator" aria-label="下にスクロール">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">About</span>
+                <h2 class="section-title">About Me</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-intro">
+                        はじめまして、<strong>Hero</strong>です。
+                    </p>
+                    <p>
+                        高専で物理学を専攻し、素粒子物理学の研究に取り組んでいます。
+                        研究の傍ら、プログラミングにも興味を持ち、
+                        HarmonyOSアプリ開発やWebアプリケーション制作を行っています。
+                    </p>
+                    <p>
+                        「科学」と「技術」の両方を追求することで、
+                        新しい発見と創造的なソリューションを生み出すことを目指しています。
+                    </p>
+
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">5+</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">Languages</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">Curiosity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-image">
+                    <div class="image-frame">
+                        <div class="image-placeholder">
+                            <span>🔬</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section section-alt" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Skills</span>
+                <h2 class="section-title">Skills & Interests</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card" data-aos="fade-up">
+                    <div class="skill-icon">🔬</div>
+                    <h3 class="skill-title">Physics</h3>
+                    <p class="skill-desc">素粒子物理学、量子力学、統計力学</p>
+                    <div class="skill-tags">
+                        <span class="tag">Particle Physics</span>
+                        <span class="tag">Quantum Mechanics</span>
+                    </div>
+                </div>
+
+                <div class="skill-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="skill-icon">🐍</div>
+                    <h3 class="skill-title">Python</h3>
+                    <p class="skill-desc">データ分析、機械学習、自動化スクリプト</p>
+                    <div class="skill-tags">
+                        <span class="tag">NumPy</span>
+                        <span class="tag">Pandas</span>
+                        <span class="tag">Matplotlib</span>
+                    </div>
+                </div>
+
+                <div class="skill-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="skill-icon">📱</div>
+                    <h3 class="skill-title">HarmonyOS</h3>
+                    <p class="skill-desc">ArkTS、IME開発、ネイティブアプリ</p>
+                    <div class="skill-tags">
+                        <span class="tag">ArkTS</span>
+                        <span class="tag">DevEco Studio</span>
+                    </div>
+                </div>
+
+                <div class="skill-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="skill-icon">🌐</div>
+                    <h3 class="skill-title">Web Development</h3>
+                    <p class="skill-desc">フロントエンド、静的サイト構築</p>
+                    <div class="skill-tags">
+                        <span class="tag">HTML/CSS/JS</span>
+                        <span class="tag">Responsive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Projects</span>
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="projects-grid">
+                <article class="project-card featured" data-aos="fade-up">
+                    <div class="project-image">
+                        <div class="project-placeholder">📚</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">HarmonyOS</span>
+                            <span class="tag">Research</span>
+                        </div>
+                        <h3 class="project-title">Research Management System</h3>
+                        <p class="project-desc">
+                            研究ノートから論文・arXiv・業績・Grantまでを一貫管理できるシステム。
+                            HarmonyOS NEXTとWebの両方に対応。
+                        </p>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-image">
+                        <div class="project-placeholder">⌨️</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">HarmonyOS</span>
+                            <span class="tag">IME</span>
+                        </div>
+                        <h3 class="project-title">Japanese Flick Keyboard</h3>
+                        <p class="project-desc">
+                            HarmonyOS NEXT向けの日本語フリック入力キーボード。
+                            ネイティブIMEとして動作。
+                        </p>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-image">
+                        <div class="project-placeholder">🎬</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">HarmonyOS</span>
+                            <span class="tag">Media</span>
+                        </div>
+                        <h3 class="project-title">Tube Player</h3>
+                        <p class="project-desc">
+                            HarmonyOS向けのビデオプレーヤーアプリ。
+                            PiP対応、シンプルなUI。
+                        </p>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section class="section" id="references">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">References</span>
+                <h2 class="section-title">📚 参考資料</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="projects-grid">
+                <article class="project-card" data-aos="fade-up">
+                    <div class="project-image">
+                        <div class="project-placeholder">⚛️</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">Physics</span>
+                            <span class="tag">Quantum</span>
+                        </div>
+                        <h3 class="project-title">シュレディンガー方程式の導出</h3>
+                        <p class="project-desc">
+                            27のステップで理解する量子力学の基礎方程式。平面波からハミルトニアンの演算子形式までを詳細に解説。
+                        </p>
+                        <div class="project-links">
+                            <a href="schrodinger.html" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <article class="project-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-image">
+                        <div class="project-placeholder">⚡</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">Physics</span>
+                            <span class="tag">Electromagnetism</span>
+                        </div>
+                        <h3 class="project-title">クーロン→マクスウェル方程式</h3>
+                        <p class="project-desc">
+                            一本道で理解する電磁気学の本質。8ステップでマクスウェル方程式を導出。
+                        </p>
+                        <div class="project-links">
+                            <a href="maxwell.html" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            \</div\>
+            <article class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="project-image">
+                    <div class="project-placeholder">⚙️</div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="tag tag-primary">Physics</span>
+                        <span class="tag">Mechanics</span>
+                    </div>
+                    <h3 class="project-title">連成振動の解析</h3>
+                    <p class="project-desc">
+                        バネ付き質点系の運動方程式、ラグランジアン、分散関係を5ステップで導出。
+                    </p>
+                    <div class="project-links">
+                        <a href="notes/coupled_oscillations.html" class="project-link">
+                            <span>View Details</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+    </section>
+    <article class="project-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="project-image">
+            <div class="project-placeholder">🌌</div>
+        </div>
+        <div class="project-content">
+            <div class="project-tags">
+                <span class="tag tag-primary">Physics</span>
+                <span class="tag">Celestial</span>
+            </div>
+            <h3 class="project-title">3体問題：重心運動の分離</h3>
+            <p class="project-desc">
+                2体問題からラグランジュ点まで：ケプラーの法則と天体力学の基礎を12ステップで解説。
+            </p>
+            <div class="project-links">
+                <a href="notes/celestial_mechanics.html" class="project-link">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </article>
+    ﻿<article class="project-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="project-image">
+            <div class="project-placeholder">⚡</div>
+        </div>
+        <div class="project-content">
+            <div class="project-tags">
+                <span class="tag tag-primary">Physics</span>
+                <span class="tag">Electromagnetism</span>
+            </div>
+            <h3 class="project-title">ガウスの法則とクーロンの法則</h3>
+            <p class="project-desc">
+                電束密度、ガウスの法則、導体球、クーロンの法則の導出を解説。
+            </p>
+            <div class="project-links">
+                <a href="notes/gauss_law.html" class="project-link">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </article>
+    <article class="project-card" data-aos="fade-up" data-aos-delay="700">
+        <div class="project-image">
+            <div class="project-placeholder">🧲</div>
+        </div>
+        <div class="project-content">
+            <div class="project-tags">
+                <span class="tag tag-primary">Physics</span>
+                <span class="tag">Electromagnetism</span>
+            </div>
+            <h3 class="project-title">ビオ・サバールの法則と直線電流の磁場</h3>
+            <p class="project-desc">
+                ビオ・サバールの法則から無限長直線電流の磁場を導出。
+            </p>
+            <div class="project-links">
+                <a href="notes/biot_savart.html" class="project-link">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <article class="project-card" data-aos="fade-up" data-aos-delay="800">
+            <div class="project-image">
+                <div class="project-placeholder">📐</div>
+            </div>
+            <div class="project-content">
+                <div class="project-tags">
+                    <span class="tag tag-primary">Physics</span>
+                    <span class="tag">Electromagnetism</span>
+                </div>
+                <h3 class="project-title">マクスウェル方程式導出準備</h3>
+                <p class="project-desc">
+                    経験則からビオ・サバールの法則を想像し導出する考え方。
+                </p>
+                <div class="project-links">
+                    <a href="notes/maxwell_prep.html" class="project-link">
+                        <span>View Details</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <article class="project-card" data-aos="fade-up" data-aos-delay="900">
+                <div class="project-image">
+                    <div class="project-placeholder">🔥</div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="tag tag-primary">Column</span>
+                        <span class="tag">Physics</span>
+                        <span class="tag">History</span>
+                    </div>
+                    <h3 class="project-title">炉の色を読む知 ― 奈良時代から黒体放射へ</h3>
+                    <p class="project-desc">
+                        奈良時代の職人の知とプランク・ウィーン・シュテファン＝ボルツマンの法則。
+                    </p>
+                    <div class="project-links">
+                        <a href="notes/blackbody_column.html" class="project-link">
+                            <span>View Details</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <article class="project-card" data-aos="fade-up" data-aos-delay="1000">
+                    <div class="project-image">
+                        <div class="project-placeholder">⏱️</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag tag-primary">Physics</span>
+                            <span class="tag">Mechanics</span>
+                        </div>
+                        <h3 class="project-title">単振り子の運動方程式と解</h3>
+                        <p class="project-desc">
+                            トルク・慣性モーメントから微分方程式を解き、振動解を導出。
+                        </p>
+                        <div class="project-links">
+                            <a href="notes/simple_pendulum.html" class="project-link">
+                                <span>View Details</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Dashboard Section -->
+                    <section class="section" id="dashboard">
+                        <div class="container">
+                            <div class="section-header" data-aos="fade-up">
+                                <span class="section-tag">Dashboard</span>
+                                <h2 class="section-title">App Downloads</h2>
+                                <div class="section-line"></div>
+                                <p class="section-subtitle">HarmonyOS (Next) applications developed during research.</p>
+                            </div>
+
+                            <div class="projects-grid">
+                                <!-- NewPipe Harmony Card -->
+                                <article class="project-card" data-aos="fade-up">
+                                    <div class="project-image">
+                                        <div class="project-placeholder">📽️</div>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-tags">
+                                            <span class="tag tag-primary">HarmonyOS</span>
+                                            <span class="tag">Streaming</span>
+                                        </div>
+                                        <h3 class="project-title">NewPipe Harmony</h3>
+                                        <p class="project-desc">
+                                            YouTube streaming client for HarmonyOS Next. Features background playback
+                                            and PiP.
+                                        </p>
+                                        <div class="project-links">
+                                            <a href="apps/newpipe_harmony.hap" class="project-link">
+                                                <span>Download HAP</span>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path
+                                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Japanese IME Card -->
+                                <article class="project-card" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="project-image">
+                                        <div class="project-placeholder">⌨️</div>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-tags">
+                                            <span class="tag tag-primary">HarmonyOS</span>
+                                            <span class="tag">Tools</span>
+                                        </div>
+                                        <h3 class="project-title">Japanese IME</h3>
+                                        <p class="project-desc">
+                                            Custom Japanese Input Method for HarmonyOS. Flick input support.
+                                        </p>
+                                        <div class="project-links">
+                                            <a href="apps/japanese_keyboard.hap" class="project-link">
+                                                <span>Download HAP</span>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path
+                                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- GPT Assistant Card -->
+                                <article class="project-card" data-aos="fade-up" data-aos-delay="200">
+                                    <div class="project-image">
+                                        <div class="project-placeholder">🤖</div>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-tags">
+                                            <span class="tag tag-primary">HarmonyOS</span>
+                                            <span class="tag">AI</span>
+                                        </div>
+                                        <h3 class="project-title">GPT Assistant</h3>
+                                        <p class="project-desc">
+                                            AI-powered research assistant integrated into HarmonyOS ecosystem.
+                                        </p>
+                                        <div class="project-links">
+                                            <a href="apps/gpt_assist.hap" class="project-link">
+                                                <span>Download HAP</span>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path
+                                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </article>
+        </article>
+    </article> <!-- Contact Section -->
+    <article class="project-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="project-image">
+            <div class="project-placeholder">🌊</div>
+        </div>
+        <div class="project-content">
+            <div class="project-tags">
+                <span class="tag tag-primary">Physics</span>
+                <span class="tag">Electromagnetism</span>
+            </div>
+            <h3 class="project-title">電磁波の波動方程式の導出</h3>
+            <p class="project-desc">
+                マクスウェル方程式から波動方程式の標準形を導出。
+            </p>
+            <div class="project-links">
+                <a href="notes/wave_equation.html" class="project-link">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </article>
+    <article class="project-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="project-image">
+            <div class="project-placeholder">🔌</div>
+        </div>
+        <div class="project-content">
+            <div class="project-tags">
+                <span class="tag tag-primary">Physics</span>
+                <span class="tag">Electromagnetism</span>
+            </div>
+            <h3 class="project-title">双極子の電場の導出</h3>
+            <p class="project-desc">
+                電位からベクトル解析を用いて双極子の電場を導出。
+            </p>
+            <div class="project-links">
+                <a href="notes/dipole_field.html" class="project-link">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </article>
+    <section class="section section-alt" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Contact</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="contact-content">
+                <p class="contact-intro">
+                    お気軽にご連絡ください。<br>
+                    研究、プロジェクト、コラボレーションなど、どんな話題でも歓迎です。
+                </p>
+
+                <div class="contact-links">
+                    <a href="mailto:nobuhiro9511@petalmail.com" class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-info">
+                            <span class="contact-label">Email</span>
+                            <span class="contact-value">nobuhiro9511@petalmail.com</span>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/hiro9511" target="_blank" rel="noopener" class="contact-card">
+                        <div class="contact-icon">💻</div>
+                        <div class="contact-info">
+                            <span class="contact-label">GitHub</span>
+                            <span class="contact-value">github.com/hiro9511</span>
+                        </div>
+                    </a>
+
+                    <a href="https://twitter.com/" target="_blank" rel="noopener" class="contact-card">
+                        <div class="contact-icon">🐦</div>
+                        <div class="contact-info">
+                            <span class="contact-label">Twitter/X</span>
+                            <span class="contact-value">@hero</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Designed & Built by <strong>Hero</strong>
+                </p>
+                <p class="footer-copyright">
+                    © 2026 All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
