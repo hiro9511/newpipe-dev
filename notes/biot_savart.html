@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ビオ・サバールの法則と直線電流の磁場 | Hero</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent: #ff6b9d;
+            --accent-secondary: #c44569;
+            --border-color: #2a2a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 3rem 0 1rem;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #a855f7;
+            margin: 1.5rem 0 0.8rem;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        p {
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+
+        .note-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .equation-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+            overflow-x: auto;
+        }
+
+        .equation-box.result {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            margin: 1rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+            color: var(--text-secondary);
+        }
+
+        .check-item::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .formula-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .formula-table th,
+        .formula-table td {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .formula-table th {
+            background: var(--bg-secondary);
+            color: var(--accent);
+        }
+
+        .formula-table td {
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .diagram-note {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px dashed #a855f7;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #a855f7;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../index.html" class="logo">Hero</a>
+        <a href="../index.html" class="back-link">← ポートフォリオに戻る</a>
+    </header>
+
+    <div class="container">
+        <h1>🧲 ビオ・サバールの法則と直線電流の磁場</h1>
+        <p>電流が作る磁場をビオ・サバールの法則から導出し、無限長直線電流の磁場公式を導きます。</p>
+
+        <!-- Section 1: 前提条件 -->
+        <section class="note-section">
+            <h2>❶ 前提条件と基本定義</h2>
+
+            <h3>微小線分ベクトルの定義</h3>
+            <div class="equation-box">
+                $$ \vec{dL} = \vec{n} \, dL \tag{4-2} $$
+            </div>
+            <p>ここで $\vec{n}$ は電流の流れる方向の単位ベクトル、$dL$ は微小線分の長さです。</p>
+        </section>
+
+        <!-- Section 2: ビオ・サバールの法則 -->
+        <section class="note-section">
+            <h2>❷ ビオ・サバールの法則</h2>
+
+            <h3>微小磁場の基本式</h3>
+            <p>電流素片 $I \, dL$ が点Pに作る微小磁場：</p>
+            <div class="equation-box">
+                $$ d\vec{B} = \frac{\mu_0}{4\pi} \frac{I \, dL}{r^2} \, \vec{n} \times \vec{r}_0 \tag{4-3} $$
+            </div>
+
+            <h3>磁場の大きさ</h3>
+            <p>外積の大きさを取ると：</p>
+            <div class="equation-box">
+                $$ dB = \frac{\mu_0}{4\pi} \frac{I \, dL}{r^2} \sin\theta \tag{4-5} $$
+            </div>
+            <p>$\theta$ は電流方向 $\vec{n}$ と位置ベクトル $\vec{r}_0$ のなす角です。</p>
+
+            <h3>線積分形式</h3>
+            <p>全体の磁場は各微小成分の積分で得られます：</p>
+            <div class="equation-box">
+                $$ \vec{B} = \int_L d\vec{B}(L) \tag{4-6} $$
+            </div>
+            <div class="equation-box">
+                $$ \vec{B} = \frac{\mu_0}{4\pi} \int_L \frac{I \, d\vec{L} \times \vec{r}}{r^3} \tag{4-7} $$
+            </div>
+            <p>直線電流に対しては、向き $\vec{n}$ を分離して：</p>
+            <div class="equation-box">
+                $$ \vec{B} = \frac{\mu_0}{4\pi} \int_L \frac{I \, dL}{r^2} \, \vec{n} \times \vec{r}_0 \tag{4-8} $$
+            </div>
+        </section>
+
+        <!-- Section 3: 座標系と外積の計算 -->
+        <section class="note-section">
+            <h2>❸ 座標系と外積の計算</h2>
+
+            <h3>観測点の座標表示</h3>
+            <p>観測点を極座標で表すと：</p>
+            <div class="equation-box">
+                $$ \vec{r} = R(\cos\theta \, \vec{i} + \sin\theta \, \vec{j}) \tag{4-10} $$
+            </div>
+            <p>単位ベクトルに正規化すると：</p>
+            <div class="equation-box">
+                $$ \vec{r}_0 = \cos\theta \, \vec{i} + \sin\theta \, \vec{j} \tag{4-11} $$
+            </div>
+
+            <h3>電流方向の単位ベクトル</h3>
+            <p>電流が z 軸方向（上向き）の場合：</p>
+            <div class="equation-box">
+                $$ \vec{n} = \vec{k} \tag{4-12} $$
+            </div>
+
+            <h3>外積の展開</h3>
+            <ol class="step-list">
+                <li>外積を準備：
+                    <div class="equation-box">
+                        $$ \vec{n} \times \vec{r}_0 = \vec{k} \times (\cos\theta \, \vec{i} + \sin\theta \, \vec{j})
+                        \tag{4-13} $$
+                    </div>
+                </li>
+                <li>項ごとに展開：
+                    <div class="equation-box">
+                        $$ \vec{n} \times \vec{r}_0 = (\vec{k} \times \vec{i})\cos\theta + (\vec{k} \times
+                        \vec{j})\sin\theta \tag{4-14} $$
+                    </div>
+                </li>
+                <li>$\vec{k} \times \vec{i} = \vec{j}$、$\vec{k} \times \vec{j} = -\vec{i}$ を使って：
+                    <div class="equation-box">
+                        $$ \vec{n} \times \vec{r}_0 = -\vec{i}\sin\theta + \vec{j}\cos\theta \tag{4-15} $$
+                    </div>
+                </li>
+            </ol>
+            <p>この結果は位置ベクトルを90度回転させたベクトル（磁場の方向）を表します。</p>
+        </section>
+
+        <!-- Section 4: 回転行列 -->
+        <section class="note-section">
+            <h2>❹ 回転行列による解釈</h2>
+
+            <p>三角関数による極座標表示：</p>
+            <div class="equation-box">
+                $$ x = r\cos\theta, \quad y = r\sin\theta \tag{4-16} $$
+            </div>
+
+            <p>回転行列の定義：</p>
+            <div class="equation-box">
+                $$ R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+                \tag{4-18} $$
+            </div>
+
+            <p>90度回転の行列：</p>
+            <div class="equation-box">
+                $$ R\left(\frac{\pi}{2}\right) = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix} \tag{4-19} $$
+            </div>
+
+            <p>座標変換：</p>
+            <div class="equation-box">
+                $$ \begin{pmatrix} x' \\ y' \end{pmatrix} = R\left(\frac{\pi}{2}\right) \begin{pmatrix} x \\ y
+                \end{pmatrix} \tag{4-17} $$
+            </div>
+
+            <div class="diagram-note">
+                📐 磁場の方向 $\vec{n} \times \vec{r}_0$ は、位置ベクトル $\vec{r}_0$ を90度回転させた方向であり、これは右ねじの法則と一致します。
+            </div>
+        </section>
+
+        <!-- Section 5: 直線電流の磁場導出 -->
+        <section class="note-section">
+            <h2>❺ 無限長直線電流の磁場を導出</h2>
+
+            <h3>微小磁場の大きさ</h3>
+            <div class="equation-box">
+                $$ dB = \frac{\mu_0}{4\pi} \frac{I\sin\theta}{r^2} \, dL \tag{4-20} $$
+            </div>
+
+            <h3>全体の磁場</h3>
+            <div class="equation-box">
+                $$ B = \int dB(L) = \frac{\mu_0 I}{4\pi} \int \frac{\sin\theta}{r^2} \, dL \tag{4-21, 4-22} $$
+            </div>
+
+            <h3>幾何学的関係式</h3>
+            <table class="formula-table">
+                <tr>
+                    <th>式番号</th>
+                    <th>関係式</th>
+                    <th>意味</th>
+                </tr>
+                <tr>
+                    <td>(4-23)</td>
+                    <td>$r = \dfrac{R}{\sin\theta}$</td>
+                    <td>位置と角度の関係</td>
+                </tr>
+                <tr>
+                    <td>(4-24)</td>
+                    <td>$-L = R\cot\theta$</td>
+                    <td>電流上の位置と角度</td>
+                </tr>
+            </table>
+
+            <h3>変数変換（$L \to \theta$）</h3>
+            <div class="equation-box">
+                $$ \frac{dL}{d\theta} = -R \frac{d}{d\theta}\left(\frac{\cos\theta}{\sin\theta}\right) \tag{4-25} $$
+            </div>
+            <div class="equation-box">
+                $$ dL = \frac{R}{\sin^2\theta} \, d\theta \tag{4-26} $$
+            </div>
+
+            <h3>積分の実行</h3>
+            <p>$\theta$ 積分に変換すると：</p>
+            <div class="equation-box">
+                $$ B = \frac{\mu_0 I}{4\pi R} \int_0^{\pi} \sin\theta \, d\theta \tag{4-27} $$
+            </div>
+            <p>積分を計算すると：</p>
+            <div class="equation-box">
+                $$ \int_0^{\pi} \sin\theta \, d\theta = [-\cos\theta]_0^{\pi} = -(-1 - 1) = 2 $$
+            </div>
+        </section>
+
+        <!-- Section 6: 最終結果 -->
+        <section class="note-section">
+            <h2>❻ 最終結果</h2>
+
+            <h3>磁場の大きさ</h3>
+            <div class="equation-box result">
+                $$ B = \frac{\mu_0 I}{2\pi R} \tag{4-28} $$
+            </div>
+
+            <h3>磁場ベクトル（方向込み）</h3>
+            <div class="equation-box result">
+                $$ \vec{B} = \frac{\mu_0 I}{2\pi R} \, \vec{n} \times \vec{r}_0 \tag{4-29} $$
+            </div>
+
+            <div class="check-item">無限長直線電流が距離 $R$ の点に作る磁場</div>
+            <div class="check-item">磁場の方向は右ねじの法則に従う</div>
+            <div class="check-item">電流からの距離に反比例して減衰</div>
+        </section>
+
+        <!-- Summary Table -->
+        <section class="note-section">
+            <h2>📋 式番号まとめ</h2>
+            <table class="formula-table">
+                <tr>
+                    <th>式番号</th>
+                    <th>数式</th>
+                    <th>意味</th>
+                </tr>
+                <tr>
+                    <td>(4-2)</td>
+                    <td>$\vec{dL} = \vec{n} \, dL$</td>
+                    <td>微小線分ベクトルの定義</td>
+                </tr>
+                <tr>
+                    <td>(4-3)</td>
+                    <td>$d\vec{B} = \frac{\mu_0}{4\pi} \frac{I \, dL}{r^2} \vec{n} \times \vec{r}_0$</td>
+                    <td>ビオ・サバールの法則</td>
+                </tr>
+                <tr>
+                    <td>(4-5)</td>
+                    <td>$dB = \frac{\mu_0}{4\pi} \frac{I \, dL}{r^2} \sin\theta$</td>
+                    <td>磁場の大きさ</td>
+                </tr>
+                <tr>
+                    <td>(4-7)</td>
+                    <td>$\vec{B} = \frac{\mu_0}{4\pi} \int \frac{I \, d\vec{L} \times \vec{r}}{r^3}$</td>
+                    <td>積分形式</td>
+                </tr>
+                <tr>
+                    <td>(4-28)</td>
+                    <td>$B = \frac{\mu_0 I}{2\pi R}$</td>
+                    <td class="highlight">直線電流の磁場（結果）</td>
+                </tr>
+                <tr>
+                    <td>(4-29)</td>
+                    <td>$\vec{B} = \frac{\mu_0 I}{2\pi R} \vec{n} \times \vec{r}_0$</td>
+                    <td class="highlight">方向込みの最終式</td>
+                </tr>
+            </table>
+        </section>
+
+    </div>
+</body>
+
+</html>
