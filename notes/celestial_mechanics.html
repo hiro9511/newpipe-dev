@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3体問題：重心運動の分離とケプラーの法則 | Hero Portfolio</title>
+    <meta name="description" content="2体問題から3体問題まで：重心運動の分離、軌道方程式、ケプラーの法則、ラグランジュ点の完全導出">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient-start: #0f2027;
+            --bg-gradient-mid: #203a43;
+            --bg-gradient-end: #2c5364;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-color: #f093fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 32, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #0f2027;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent-gradient);
+            color: #0f2027;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .equation-box {
+            background: rgba(240, 147, 251, 0.08);
+            border: 1px solid rgba(240, 147, 251, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-box.highlight {
+            background: rgba(245, 87, 108, 0.15);
+            border-color: rgba(245, 87, 108, 0.4);
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.1);
+        }
+
+        .important-note {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #fec107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-box {
+            background: rgba(67, 233, 123, 0.1);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-box h4 {
+            color: #43e97b;
+            margin-bottom: 0.5rem;
+        }
+
+        ul.orbit-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.orbit-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul.orbit-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        .figure-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .figure-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .figure-box .figure-caption {
+            color: #333;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .katex-display {
+            margin: 0.8em 0;
+        }
+
+        .toc {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            padding: 0;
+            border: none;
+            color: var(--accent-color);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            padding: 0.3rem 0;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="/index.html" class="logo">Hero</a>
+            <a href="/index.html" class="back-link">
+                <span>←</span> ポートフォリオに戻る
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>3体問題</h1>
+            <p class="subtitle">重心運動の分離・軌道方程式・ケプラーの法則・ラグランジュ点</p>
+            <span class="badge">🌌 天体力学ノート</span>
+        </section>
+
+        <div class="toc">
+            <h3>目次</h3>
+            <ul>
+                <li><a href="#part1">第1問：2体問題と重心運動の分離</a></li>
+                <li><a href="#polar">極座標での運動方程式</a></li>
+                <li><a href="#orbit">軌道方程式の導出</a></li>
+                <li><a href="#kepler">ケプラーの法則</a></li>
+                <li><a href="#part2">第2問：3体問題とラグランジュ点</a></li>
+            </ul>
+        </div>
+
+        <!-- 図一覧 -->
+        <div class="card" id="figures">
+            <h2>
+                <div class="step-number">📊</div> 図一覧
+            </h2>
+            <p>本ノートで使用する図の一覧です。</p>
+            <div class="figure-box">
+                <img src="images/all_figures.png" alt="図1〜10: 天体力学の図解">
+                <p class="figure-caption">図1〜10: 中心力場の軌道、楕円軌道、面積速度、重心系、回転座標系、ラグランジュ点</p>
+            </div>
+        </div>
+
+        <!-- 第1問：2体問題 -->
+        <div class="card" id="part1">
+            <h2>
+                <div class="step-number">1</div> 第1問：2体問題の設定
+            </h2>
+            <p>「重力のみで相互作用する2つの質点からなる系がある。この系の運動について述べよ」</p>
+            <p>質点1, 2の位置を $\vec{R}_1$, $\vec{R}_2$、相対位置ベクトルを $\vec{r} = \vec{R}_2 - \vec{R}_1$ とする。</p>
+
+            <h3>万有引力</h3>
+            <div class="equation-box">
+                $$\vec{F}_{12} = G \frac{M_1 M_2}{|\vec{r}|^2} \frac{\vec{r}}{|\vec{r}|} \quad \cdots (1)$$
+            </div>
+            <div class="equation-box">
+                $$\vec{F}_{21} = -G \frac{M_1 M_2}{|\vec{r}|^2} \frac{\vec{r}}{|\vec{r}|} \quad \cdots (2)$$
+            </div>
+            <p>作用・反作用の法則より $\vec{F}_{12} + \vec{F}_{21} = 0$</p>
+
+            <h3>運動方程式</h3>
+            <div class="equation-box">
+                $$\vec{F}_{12} = M_1 \ddot{\vec{R}}_1, \quad \vec{F}_{21} = M_2 \ddot{\vec{R}}_2$$
+            </div>
+            <p>①+②を計算すると：</p>
+            <div class="equation-box">
+                $$M_1 \ddot{\vec{R}}_1 + M_2 \ddot{\vec{R}}_2 = 0 \quad \cdots (3)$$
+            </div>
+
+            <h3>運動量保存</h3>
+            <p>③の両辺を時間積分すると：</p>
+            <div class="equation-box">
+                $$M_1 \dot{\vec{R}}_1 + M_2 \dot{\vec{R}}_2 = \vec{P} \quad \text{（Pは積分定数）} \quad \cdots (4)$$
+            </div>
+            <p>$\dot{\vec{R}}_1$, $\dot{\vec{R}}_2$ は質点の速度である。これは運動量保存の法則を表す。</p>
+
+            <p>更に時間で積分して：</p>
+            <div class="equation-box">
+                $$M_1 \vec{R}_1 + M_2 \vec{R}_2 = \vec{P}t + \vec{Q} \quad \text{（Qは積分定数）} \quad \cdots (5)$$
+            </div>
+
+            <h3>重心の運動</h3>
+            <p>両辺を $M_1 + M_2$ で割る：</p>
+            <div class="equation-box highlight">
+                $$\vec{R}_G = \frac{M_1 \vec{R}_1 + M_2 \vec{R}_2}{M_1 + M_2} = \frac{\vec{P}}{M_1 + M_2}t +
+                \frac{\vec{Q}}{M_1 + M_2}$$
+            </div>
+            <p>（$\frac{\vec{P}}{M_1+M_2}$：初速度、$\frac{\vec{Q}}{M_1+M_2}$：初期座標）</p>
+            <p>これを時間で2階微分すると：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{R}}_G = 0 \quad \cdots (6)$$
+            </div>
+            <div class="important-note">
+                <strong>結論：</strong>重心は等速直線運動をしている。
+            </div>
+        </div>
+
+        <!-- 相対運動と換算質量 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">2</div> 相対運動と換算質量
+            </h2>
+            <p>相対位置ベクトルを $\vec{r} = \vec{R}_2 - \vec{R}_1$ と定義する。</p>
+            <p>両辺を時間で2階微分すると：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}} = \ddot{\vec{R}}_2 - \ddot{\vec{R}}_1$$
+            </div>
+            <p>運動方程式より $M_2\ddot{\vec{R}}_2 = \vec{F}_{21}$, $M_1\ddot{\vec{R}}_1 = \vec{F}_{12}$</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}} = \frac{\vec{F}_{21}}{M_2} - \frac{\vec{F}_{12}}{M_1}$$
+            </div>
+            <p>②式 $\vec{F}_{21} = -\vec{F}_{12}$ を用いると：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}} = -\vec{F}_{12}\left(\frac{1}{M_1} + \frac{1}{M_2}\right)$$
+            </div>
+
+            <h3>換算質量（縮約質量）</h3>
+            <div class="equation-box highlight">
+                $$\frac{1}{\mu} = \frac{1}{M_1} + \frac{1}{M_2} \quad \cdots (7)$$
+            </div>
+            <p>すなわち：</p>
+            <div class="equation-box highlight">
+                $$\mu = \frac{M_1 M_2}{M_1 + M_2} \quad \cdots (8)$$
+            </div>
+
+            <p>このとき、相対運動の運動方程式は：</p>
+            <div class="equation-box">
+                $$\mu \ddot{\vec{r}} = \vec{F}_{21} \quad \cdots (9)$$
+            </div>
+            <p>①式を代入すると：</p>
+            <div class="equation-box">
+                $$\mu \ddot{\vec{r}} = -G\frac{M_1 M_2}{r^2}\frac{\vec{r}}{r} \quad \cdots (10)$$
+            </div>
+            <p>よって：</p>
+            <div class="equation-box highlight">
+                $$\ddot{\vec{r}} = -G\frac{M_1 + M_2}{r^2}\frac{\vec{r}}{r} \quad \cdots (11)$$
+            </div>
+
+            <div class="result-box">
+                <h4>重心運動と相対運動の分離</h4>
+                <p>以上より、2体問題は次の2つに分離できる：</p>
+                <ul class="orbit-list">
+                    <li>重心の等速直線運動</li>
+                    <li>換算質量 $\mu$ をもつ1粒子の中心力運動</li>
+                </ul>
+                <p>これを重心運動と相対運動の分離という。</p>
+            </div>
+        </div>
+
+        <!-- 極座標での運動方程式 -->
+        <div class="card" id="polar">
+            <h2>
+                <div class="step-number">3</div> 極座標での運動方程式
+            </h2>
+            <p>位置ベクトルと速度の極座標表示：</p>
+            <div class="equation-box">
+                $$\vec{r} = r\hat{r} \quad \cdots (1')$$
+            </div>
+            <div class="equation-box">
+                $$\vec{v} = \dot{r}\hat{r} + r\dot{\theta}\hat{\theta} \quad \cdots (2')$$
+            </div>
+            <p>単位ベクトルの時間微分：</p>
+            <div class="equation-box">
+                $$\dot{\hat{r}} = \dot{\theta}\hat{\theta} \quad \cdots (3')$$
+            </div>
+            <div class="equation-box">
+                $$\dot{\hat{\theta}} = -\dot{\theta}\hat{r} \quad \cdots (4')$$
+            </div>
+            <p>加速度は：</p>
+            <div class="equation-box highlight">
+                $$\vec{a} = (\ddot{r} - r\dot{\theta}^2)\hat{r} + (2\dot{r}\dot{\theta} + r\ddot{\theta})\hat{\theta}
+                \quad \cdots (6')$$
+            </div>
+
+            <p>(17), (18) を (12) に代入すると：</p>
+            <div class="equation-box">
+                $$\ddot{r}\cos\theta - 2\dot{r}\dot{\theta}\sin\theta - r\dot{\theta}^2\cos\theta -
+                r\ddot{\theta}\sin\theta = -\frac{\mu}{r^2}\cos\theta \quad \cdots (19)$$
+            </div>
+            <div class="equation-box">
+                $$\ddot{r}\sin\theta + 2\dot{r}\dot{\theta}\cos\theta - r\dot{\theta}^2\sin\theta +
+                r\ddot{\theta}\cos\theta = -\frac{\mu}{r^2}\sin\theta \quad \cdots (20)$$
+            </div>
+
+            <h3>行列形式への変換</h3>
+            <p>2つの式を整理すると：</p>
+            <div class="equation-box">
+                $$\begin{cases}
+                (\ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2})\cos\theta - (2\dot{r}\dot{\theta} +
+                r\ddot{\theta})\sin\theta = 0 \\
+                (\ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2})\sin\theta + (2\dot{r}\dot{\theta} +
+                r\ddot{\theta})\cos\theta = 0
+                \end{cases}$$
+            </div>
+            <p>これを行列の形に直す：</p>
+            <div class="equation-box">
+                $$\begin{pmatrix} \ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2} & -(2\dot{r}\dot{\theta} +
+                r\ddot{\theta}) \\ 2\dot{r}\dot{\theta} + r\ddot{\theta} & \ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2}
+                \end{pmatrix} \begin{pmatrix} \cos\theta \\ \sin\theta \end{pmatrix} = \begin{pmatrix} 0 \\ 0
+                \end{pmatrix} \quad \cdots (21)$$
+            </div>
+
+            <p>$(\cos\theta, \sin\theta) \neq (0, 0)$ より $\det A = 0$</p>
+            <div class="equation-box">
+                $$\det A = \left(\ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2}\right)^2 + (2\dot{r}\dot{\theta} +
+                r\ddot{\theta})^2 = 0 \quad \cdots (22)$$
+            </div>
+            <p>よって：</p>
+            <div class="equation-box highlight">
+                $$\ddot{r} - r\dot{\theta}^2 + \frac{\mu}{r^2} = 0 \quad \cdots (23)$$
+            </div>
+            <div class="equation-box highlight">
+                $$2\dot{r}\dot{\theta} + r\ddot{\theta} = 0 \quad \cdots (24)$$
+            </div>
+
+            <h3>角運動量保存</h3>
+            <p>(24)式は次のように書ける：</p>
+            <div class="equation-box">
+                $$\frac{d}{dt}(r^2\dot{\theta}) = 0 \quad \cdots (25)$$
+            </div>
+            <p>よって：</p>
+            <div class="equation-box highlight">
+                $$r^2\dot{\theta} = h \quad \text{（hは定数）} \quad \cdots (26)$$
+            </div>
+            <p>$h$ は単位質量あたりの角運動量である。</p>
+        </div>
+
+        <!-- 軌道方程式の導出 -->
+        <div class="card" id="orbit">
+            <h2>
+                <div class="step-number">4</div> 軌道方程式の導出
+            </h2>
+            <p>(23), (26) を用いて、(23)式を $r$ のみの式に書き換える：</p>
+            <div class="equation-box">
+                $$\ddot{r} - \frac{h^2}{r^3} + \frac{\mu}{r^2} = 0 \quad \cdots (27)$$
+            </div>
+
+            <h3>変数変換</h3>
+            <p>変数変換 $u = \frac{1}{r}$ を行う：</p>
+            <div class="equation-box">
+                $$u = \frac{1}{r} \quad \cdots (28)$$
+            </div>
+            <p>(26)式より：</p>
+            <div class="equation-box">
+                $$\dot{\theta} = hu^2 \quad \cdots (29)$$
+            </div>
+            <p>時間微分を角度微分に変換する：</p>
+            <div class="equation-box">
+                $$\frac{dr}{dt} = \frac{dr}{d\theta}\frac{d\theta}{dt}$$
+            </div>
+            <div class="equation-box">
+                $$\dot{r} = \frac{dr}{d\theta} \cdot hu^2 \quad \cdots (30)$$
+            </div>
+            <p>$r = \frac{1}{u}$ より：</p>
+            <div class="equation-box">
+                $$\dot{r} = -\frac{h}{u^2}\frac{du}{d\theta} \quad \cdots (31)$$
+            </div>
+            <p>さらに時間微分すると：</p>
+            <div class="equation-box">
+                $$\ddot{r} = -h\frac{d}{dt}\left(\frac{1}{u^2}\frac{du}{d\theta}\right)$$
+            </div>
+            <div class="equation-box">
+                $$\ddot{r} = -h^2u^2\frac{d}{d\theta}\left(\frac{1}{u^2}\frac{du}{d\theta}\right) \quad \cdots (32)$$
+            </div>
+            <p>計算すると：</p>
+            <div class="equation-box">
+                $$\ddot{r} = h^2\left(2u\left(\frac{du}{d\theta}\right)^2 - u^2\frac{d^2u}{d\theta^2}\right) \quad
+                \cdots (33)$$
+            </div>
+
+            <h3>微分方程式への代入</h3>
+            <p>(27)式に代入する：</p>
+            <div class="equation-box">
+                $$h^2\left(2u\left(\frac{du}{d\theta}\right)^2 - u^2\frac{d^2u}{d\theta^2}\right) - h^2u^3 + \mu u^2 =
+                0$$
+            </div>
+            <p>両辺を $u^2$ で割る：</p>
+            <div class="equation-box">
+                $$-h^2\frac{d^2u}{d\theta^2} - h^2u + \mu = 0$$
+            </div>
+            <div class="equation-box highlight">
+                $$\frac{d^2u}{d\theta^2} + u = \frac{\mu}{h^2} \quad \cdots (34)$$
+            </div>
+
+            <h3>軌道方程式の解</h3>
+            <p>これは定数項をもつ2階線形微分方程式である。特解を $u = \frac{\mu}{h^2}$ とすると、同次方程式は：</p>
+            <div class="equation-box">
+                $$\frac{d^2u}{d\theta^2} + u = 0$$
+            </div>
+            <p>その一般解は：</p>
+            <div class="equation-box">
+                $$u = A\cos\theta + B\sin\theta$$
+            </div>
+            <p>よって (34)式の一般解は：</p>
+            <div class="equation-box">
+                $$u = A\cos\theta + B\sin\theta + \frac{\mu}{h^2} \quad \cdots (35)$$
+            </div>
+            <p>定数 $A$, $B$ をまとめて：</p>
+            <div class="equation-box highlight">
+                $$u = \frac{\mu}{h^2}(1 + e\cos\theta) \quad \cdots (36)$$
+            </div>
+            <p>ここで $e$ は定数であり、離心率と呼ばれる。$u = \frac{1}{r}$ より：</p>
+            <div class="equation-box highlight">
+                $$r = \frac{h^2/\mu}{1 + e\cos\theta} = \frac{p}{1 + e\cos\theta} \quad \cdots (37)$$
+            </div>
+            <p>これが逆二乗力下における運動方程式の解である。</p>
+        </div>
+
+        <!-- デカルト座標への変換 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">5</div> デカルト座標への変換
+            </h2>
+            <p>(37)式を $x$, $y$ 座標で表す。図より：</p>
+            <div class="equation-box">
+                $$x = r\cos\theta, \quad y = r\sin\theta$$
+            </div>
+            <p>よって：</p>
+            <div class="equation-box">
+                $$r = \sqrt{x^2 + y^2}, \quad \cos\theta = \frac{x}{\sqrt{x^2 + y^2}}$$
+            </div>
+            <p>これを (37) 式に代入する：</p>
+            <div class="equation-box">
+                $$\sqrt{x^2 + y^2} = \frac{p}{1 + e\frac{x}{\sqrt{x^2 + y^2}}}$$
+            </div>
+            <p>両辺に $1 + e\frac{x}{\sqrt{x^2+y^2}}$ を掛ける：</p>
+            <div class="equation-box">
+                $$\sqrt{x^2 + y^2} + ex = p$$
+            </div>
+            <p>移項して：</p>
+            <div class="equation-box">
+                $$\sqrt{x^2 + y^2} = p - ex$$
+            </div>
+            <p>両辺を2乗する：</p>
+            <div class="equation-box">
+                $$x^2 + y^2 = p^2 - 2pex + e^2x^2$$
+            </div>
+            <p>整理すると：</p>
+            <div class="equation-box highlight">
+                $$(1 - e^2)x^2 + y^2 + 2pex - p^2 = 0 \quad \cdots (38)$$
+            </div>
+
+            <h3>楕円の方程式</h3>
+            <p>平方完成を行う：</p>
+            <div class="equation-box">
+                $$(1 - e^2)\left(x + \frac{pe}{1-e^2}\right)^2 + y^2 = \frac{p^2}{1-e^2}$$
+            </div>
+            <p>両辺を $\frac{p^2}{1-e^2}$ で割る：</p>
+            <div class="equation-box highlight">
+                $$\frac{\left(x + \frac{pe}{1-e^2}\right)^2}{\left(\frac{p}{1-e^2}\right)^2} +
+                \frac{y^2}{\frac{p^2}{1-e^2}} = 1 \quad \cdots (39)$$
+            </div>
+            <p>これは楕円の方程式である。従って、逆二乗力のもとでの運動は円錐曲線となる。</p>
+        </div>
+
+        <!-- 軌道の分類とエネルギー -->
+        <div class="card">
+            <h2>
+                <div class="step-number">6</div> 軌道の分類とエネルギー
+            </h2>
+            <p>エネルギーの計算：</p>
+            <div class="equation-box">
+                $$E = \frac{M_r k^2}{2p^2}(e^2 - 1) \quad \cdots (43)$$
+            </div>
+            <p>式(43)よりエネルギーが定数であることが分かる。離心率 $e$ により軌道の形は次のように分類される：</p>
+
+            <h3>[I] $e = 1$ の場合：放物線軌道</h3>
+            <p>(37)式より $e = 1$ を代入すると：</p>
+            <div class="equation-box">
+                $$x = \frac{p}{2} - \frac{y^2}{2p} \quad \cdots (44)$$
+            </div>
+            <p>焦点は原点にあり、天体 $M_2$ は $M_1$ を焦点として放物運動をする。このときのエネルギーは $E = 0$。この軌道上の物体は無限遠で静止する。</p>
+
+            <h3>[II] $0 < e < 1$ の場合：楕円軌道</h3>
+                    <p>式(43)から全エネルギー $E$ は負である。物体が無限遠に行かず、ある領域に閉じ込められた運動を描く。</p>
+                    <p>楕円の長半径 $a$ および短半径 $b$ は：</p>
+                    <div class="equation-box">
+                        $$a = \frac{p}{1-e^2} = \frac{k^2}{\mu(1-e^2)}$$
+                    </div>
+                    <div class="equation-box">
+                        $$b = \sqrt{\frac{p^2}{1-e^2}} = \frac{k^2}{\mu\sqrt{1-e^2}} \quad \cdots (45)$$
+                    </div>
+                    <p>また次式が成り立つ：</p>
+                    <div class="equation-box">
+                        $$\frac{b}{a} = \sqrt{1-e^2} \quad \cdots (46)$$
+                    </div>
+
+                    <h3>[III] $e > 1$ の場合：双曲線軌道</h3>
+                    <p>式(43)より全エネルギーは正。無限遠でポテンシャルが0であるから、この物体は無限遠に飛び去る。</p>
+                    <div class="equation-box">
+                        $$\frac{\left(x + \frac{pe}{1-e^2}\right)^2}{\left(\frac{p}{1-e^2}\right)^2} -
+                        \frac{y^2}{\left(\sqrt{\frac{p^2}{e^2-1}}\right)^2} = 1 \quad \cdots (47)$$
+                    </div>
+                    <p>これは双曲線を表す。</p>
+
+                    <div class="result-box">
+                        <ul class="orbit-list">
+                            <li><strong>$0 \leq e < 1$</strong>：楕円軌道（束縛状態、$E < 0$）</li>
+                            <li><strong>$e = 1$</strong>：放物線軌道（$E = 0$、無限遠で静止）</li>
+                            <li><strong>$e > 1$</strong>：双曲線軌道（$E > 0$、無限遠へ飛び去る）</li>
+                        </ul>
+                    </div>
+        </div>
+
+        <!-- ケプラー第2法則 -->
+        <div class="card" id="kepler">
+            <h2>
+                <div class="step-number">7</div> ケプラー第2法則
+            </h2>
+            <p>太陽の質量が十分大きく、太陽はほぼ静止しているとみなせる。$M_1 \gg M_2$ のとき $M_r \simeq M_2$。</p>
+            <p>重心の位置は：</p>
+            <div class="equation-box">
+                $$\vec{R}_G = \frac{M_1\vec{R}_1 + M_2\vec{R}_2}{M_1 + M_2} \simeq \vec{R}_1$$
+            </div>
+            <p>よって太陽はほとんど動かない。角運動量保存より：</p>
+            <div class="equation-box">
+                $$\vec{r} \times \vec{v} = \text{const}$$
+            </div>
+
+            <h3>面積速度</h3>
+            <p>微小時間 $dt$ において天体が掃く面積 $dS$ は：</p>
+            <div class="equation-box">
+                $$dS = \frac{1}{2}|\vec{r} \times d\vec{r}|$$
+            </div>
+            <p>両辺を時間で割ると：</p>
+            <div class="equation-box">
+                $$\frac{dS}{dt} = \frac{1}{2}|\vec{r} \times \vec{v}| \quad \cdots (49)$$
+            </div>
+            <p>右辺は定数であるから、面積速度は一定である。従って式(49)を時間積分すると：</p>
+            <div class="equation-box">
+                $$S = \text{const} \times t \quad \cdots (50)$$
+            </div>
+
+            <p>よって (49) は：</p>
+            <div class="equation-box">
+                $$|S| = \frac{1}{2}|\vec{r} \times \dot{\vec{r}}| = \frac{1}{2}r^2\dot{\theta} \quad \cdots (53)$$
+            </div>
+            <p>また (26) より $h = r^2\dot{\theta}$ だから：</p>
+            <div class="equation-box highlight">
+                $$S = \frac{1}{2}h \quad \cdots (54)$$
+            </div>
+            <p>よって面積速度は一定であり、角運動量の保存と等価である。</p>
+
+            <div class="important-note">
+                <strong>ケプラー第2法則：</strong>惑星は等時間に等面積を掃く。
+            </div>
+        </div>
+
+        <!-- ケプラー第3法則 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">8</div> ケプラー第3法則
+            </h2>
+            <p>楕円の面積は $\pi ab$ であるから：</p>
+            <div class="equation-box">
+                $$\frac{1}{2}Th = \pi ab \quad \cdots (55)$$
+            </div>
+            <p>楕円の性質より $b = a\sqrt{1-e^2}$、$p = a(1-e^2)$ を用いると：</p>
+            <div class="equation-box highlight">
+                $$T^2 = \frac{4\pi^2}{\mu}a^3$$
+            </div>
+            <div class="important-note">
+                <strong>ケプラー第3法則：</strong>公転周期の2乗は軌道長半径の3乗に比例する。
+            </div>
+        </div>
+
+        <!-- 第2問：3体問題 -->
+        <div class="card" id="part2">
+            <h2>
+                <div class="step-number">9</div> 第2問：3体問題
+            </h2>
+            <p>「重力のみで相互作用する3つ以上の質点からなる系において、質量分布をもつ系の運動について述べよ」</p>
+            <p>3つ以上の質点からなる系を解析的に解くことは一般に困難である。極めて特殊な場合として、$M_3$ が十分小さく、$M_1$, $M_2$ の運動に影響を与えないと仮定する。</p>
+
+            <h3>円運動する2天体</h3>
+            <p>$M_1$, $M_2$ は互いに円運動を行い、一定の角速度 $\omega$ で回転する。この角速度は周期 $T$ に対して：</p>
+            <div class="equation-box">
+                $$\omega = \frac{2\pi}{T} \quad \cdots (57)$$
+            </div>
+            <p>(56), (57) を連立すると：</p>
+            <div class="equation-box">
+                $$\omega^2 = \frac{4\pi^2}{T^2} \Rightarrow T^2 = \frac{4\pi^2}{\omega^2}$$
+            </div>
+            <p>これを (56) に代入して：</p>
+            <div class="equation-box highlight">
+                $$\omega^2 = \frac{\mu}{a^3} = \frac{G(M_1 + M_2)}{a^3} \quad \cdots (58)$$
+            </div>
+
+            <h3>重心座標系</h3>
+            <p>$M_1$, $M_2$ の重心を原点とする座標系をとる。原点の条件より：</p>
+            <div class="equation-box">
+                $$0 = \frac{M_1 x_1 + M_2 x_2}{M_1 + M_2} \quad \cdots (59)$$
+            </div>
+            <p>軌道半径 $a$ は：</p>
+            <div class="equation-box">
+                $$a = |x_2 - x_1| = \frac{h^2}{G(M_1 + M_2)} \quad \cdots (60)$$
+            </div>
+            <p>(59) より：</p>
+            <div class="equation-box">
+                $$x_1 = -\frac{M_2}{M_1 + M_2}a, \quad x_2 = \frac{M_1}{M_1 + M_2}a \quad \cdots (61)$$
+            </div>
+        </div>
+
+        <!-- 回転座標系での運動方程式 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">10</div> 回転座標系での運動方程式
+            </h2>
+            <p>回転座標系では慣性力が働くため、運動方程式は非慣性系で書かれる。座標変換は：</p>
+            <div class="equation-box">
+                $$\begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} \cos\omega t & \sin\omega t \\ -\sin\omega t &
+                \cos\omega t \end{pmatrix} \begin{pmatrix} x' \\ y' \end{pmatrix} \quad \cdots (62)$$
+            </div>
+            <p>回転行列を $A$ とすると：</p>
+            <div class="equation-box">
+                $$A = \begin{pmatrix} \cos\omega t & \sin\omega t \\ -\sin\omega t & \cos\omega t \end{pmatrix} \quad
+                \cdots (63)$$
+            </div>
+            <div class="equation-box">
+                $$\vec{r} = A\vec{r}' \quad \cdots (64)$$
+            </div>
+            <p>(64) を2階微分して：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}} = A\ddot{\vec{r}}' + 2\dot{A}\dot{\vec{r}}' + \ddot{A}\vec{r}' \quad \cdots (65)$$
+            </div>
+            <p>$M_3$ の運動方程式：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}}_3 = -G\left(\frac{(\vec{r}_3 - \vec{r}_1)}{|\vec{r}_3 - \vec{r}_1|^3}M_1 +
+                \frac{(\vec{r}_3 - \vec{r}_2)}{|\vec{r}_3 - \vec{r}_2|^3}M_2\right) \quad \cdots (66)$$
+            </div>
+            <p>逆行列 $A^{-1}$ を用いると：</p>
+            <div class="equation-box">
+                $$\ddot{\vec{r}}'_3 + 2\vec{\omega} \times \dot{\vec{r}}'_3 + \vec{\omega} \times (\vec{\omega} \times
+                \vec{r}'_3) = -G\left(\frac{(\vec{r}'_3 - \vec{r}'_1)}{|\vec{r}'_3 - \vec{r}'_1|^3}M_1 +
+                \frac{(\vec{r}'_3 - \vec{r}'_2)}{|\vec{r}'_3 - \vec{r}'_2|^3}M_2\right) \quad \cdots (68)$$
+            </div>
+
+            <p>$M_3$ の初速度が相対的に小さいと仮定し、$\dot{\vec{r}}'_3 = 0$ の場合を考える。釣り合いの条件：</p>
+            <div class="equation-box">
+                $$-\omega^2\vec{r}' = -G\left(\frac{(\vec{r}' - \vec{r}'_1)}{|\vec{r}' - \vec{r}'_1|^3}M_1 +
+                \frac{(\vec{r}' - \vec{r}'_2)}{|\vec{r}' - \vec{r}'_2|^3}M_2\right) \quad \cdots (69)$$
+            </div>
+        </div>
+
+        <!-- ラグランジュ点 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">11</div> ラグランジュ点
+            </h2>
+            <p>また (61) より：</p>
+            <div class="equation-box">
+                $$\vec{r}'_1 = \begin{pmatrix} -\frac{aM_2}{M_1 + M_2} \\ 0 \end{pmatrix}, \quad \vec{r}'_2 =
+                \begin{pmatrix} \frac{aM_1}{M_1 + M_2} \\ 0 \end{pmatrix} \quad \cdots (70)$$
+            </div>
+
+            <h3>一直線上の解（L1, L2, L3）</h3>
+            <p>(69) を $x$ 成分について書くと：</p>
+            <div class="equation-box">
+                $$\omega^2 x'_3 = GM_1\frac{x'_3 - x'_1}{|x'_3 - x'_1|^3} + GM_2\frac{x'_3 - x'_2}{|x'_3 - x'_2|^3}
+                \quad \cdots (71)$$
+            </div>
+            <p>$y$ 成分については：</p>
+            <div class="equation-box">
+                $$\omega^2 y' = G\left(\frac{M_1}{r_{13}^3} + \frac{M_2}{r_{23}^3}\right)y' \quad \cdots (72)$$
+            </div>
+            <p>(72) より $y' = 0$ または $\omega^2 = G\left(\frac{M_1}{r_{13}^3} + \frac{M_2}{r_{23}^3}\right)$ である。</p>
+            <p>$y'_3 = 0$ のとき、3天体は一直線上に並ぶ。このとき：</p>
+            <div class="equation-box">
+                $$x'_3 = x'_2 \pm a \quad \cdots (73)$$
+            </div>
+            <div class="equation-box">
+                $$r_{13} = |1 + \lambda|a, \quad r_{23} = |\lambda|a \quad \cdots (74)$$
+            </div>
+            <p>これらを (71), (72) に代入すると：</p>
+            <div class="equation-box">
+                $$\frac{\mu}{a^3} = \frac{GM_1}{a^3|1 + \lambda|^3} + \frac{GM_2}{a^3|\lambda|^3} \quad \cdots (75)$$
+            </div>
+            <p>一般には解析解を持たず、数値的に解かれる。グラフより解は3つ存在し、これらがラグランジュ点 $L_1$, $L_2$, $L_3$ に対応する。</p>
+
+            <h3>正三角形の解（L4, L5）</h3>
+            <p>対称性より $r_{13} = r_{23}$ が成り立つ場合があり、さらに3天体が正三角形の頂点に位置する解が存在する。これがラグランジュ点 $L_4$, $L_5$ である。この場合、$M_3$
+                に働く重力は $M_1$, $M_2$ からの力が合成され、遠心力と釣り合う。</p>
+        </div>
+
+        <!-- ラグランジュ点の安定性 -->
+        <div class="card">
+            <h2>
+                <div class="step-number">12</div> ラグランジュ点の安定性
+            </h2>
+            <div class="result-box">
+                <h4>5つのラグランジュ点</h4>
+                <ul class="orbit-list">
+                    <li><strong>$L_1$</strong>：$M_1$ と $M_2$ の間（不安定）</li>
+                    <li><strong>$L_2$</strong>：$M_2$ の外側（不安定）</li>
+                    <li><strong>$L_3$</strong>：$M_1$ の外側（不安定）</li>
+                    <li><strong>$L_4$</strong>：$M_1 M_2$ を底辺とする正三角形の頂点（安定）</li>
+                    <li><strong>$L_5$</strong>：$M_1 M_2$ を底辺とする正三角形の頂点（安定）</li>
+                </ul>
+            </div>
+            <div class="important-note">
+                <strong>応用例：</strong>$L_4$, $L_5$ にはトロヤ群小惑星が存在する。JWST（ジェイムズ・ウェッブ宇宙望遠鏡）は太陽-地球系の $L_2$ に配置されている。
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Designed & Built by Hero</p>
+        <p>© 2026 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+
+</html>
